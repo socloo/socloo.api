@@ -13,7 +13,7 @@ namespace Socloo.Data
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("SuperAdmins")]
+        [BsonElement("Dashboards")]
         public List<Post> Posts { get; set; }
     }
 }

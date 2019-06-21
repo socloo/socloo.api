@@ -12,7 +12,7 @@ namespace Socloo.Data
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("Questions")]
+        [BsonElement("Documents")]
         public string FileId { get; set; }
         public List<User> users { get; set; }
         public string TeacherId { get; set; }
