@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,5 +8,16 @@ namespace Socloo.Data
 {
     class Group
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
+        [BsonElement("Groups")]
+        public List<Student> Students { get; set; }
+       public List<Teacher> Teachers { get; set; }
+
+        public string Name { get; set; }
+       public string Info { get; set; }
+        public string PictureId { get; set; }
     }
 }

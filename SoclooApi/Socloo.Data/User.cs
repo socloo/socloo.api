@@ -18,12 +18,8 @@ namespace Socloo.Data
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Bio { get; set; }
-
-
-        /*        Login Data
-        Profile Pic
-
-        */
+        public string ProfilePictureId{get;set;}
+    
 
     }
 }
