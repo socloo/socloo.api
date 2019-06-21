@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Socloo.Data", "Socloo.Data\Socloo.Data.csproj", "{1B5B6537-97E9-4E26-99A6-157E870E74DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoclooAPI", "SoclooAPI\SoclooAPI.csproj", "{87092EC9-D454-41C1-BEAA-852983D70AAC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B5B6537-97E9-4E26-99A6-157E870E74DE} = {1B5B6537-97E9-4E26-99A6-157E870E74DE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
