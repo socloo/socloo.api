@@ -13,7 +13,7 @@ namespace Socloo.Data
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("SuperAdmins")]
+        [BsonElement("Assignments")]
         public List<Teacher> Teachers { get; set; }
         public List<Student> Students { get; set; }
         public DateTime ExpirationDate { get; set; }
