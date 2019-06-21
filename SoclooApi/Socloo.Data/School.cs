@@ -17,9 +17,9 @@ namespace Socloo.Data
         public string SchoolBranch { get; set; }
         public string Address { get; set; }
         public List<SchoolAdmin> Administrators { get; set; }
-        public List<Student> Students{ get; set; }
-        public List<Teacher> Teachers{ get; set; }
-        public List<Group> Groups{ get; set; }
+        public List<Student> Students { get; set; }
+        public List<Teacher> Teachers { get; set; }
+        public List<Group> Groups { get; set; }
         public List<Course> Courses { get; set; }
-}
+    }
 }

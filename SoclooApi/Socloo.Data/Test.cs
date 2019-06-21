@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
 
 namespace Socloo.Data
 {
@@ -17,11 +16,11 @@ namespace Socloo.Data
         public List<Student> Students { get; set; }
         public TimeSpan TimeMax { get; set; }
         public string PictureId { get; set; }
-        public List<Question> Questions{ get; set; }
+        public List<Question> Questions { get; set; }
 
         public int Type { get; set; }
 
     }
 
-    
+
 }

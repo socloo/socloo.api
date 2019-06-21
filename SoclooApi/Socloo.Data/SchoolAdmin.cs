@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Socloo.Data
 {
-    class SchoolAdmin:User
+    class SchoolAdmin : User
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

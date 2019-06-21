@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Socloo.Data
 {
@@ -14,7 +11,7 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("SuperAdmins")]
-        
+
         public List<School> Schools { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Socloo.;
+using Socloo.Data;
 
 
 namespace Socloo.Api.Controllers
@@ -13,6 +13,6 @@ namespace Socloo.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly MongoDbContext
+    
     }
 }

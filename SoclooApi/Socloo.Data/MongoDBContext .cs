@@ -1,14 +1,11 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Socloo.Data
 {
     class MongoDBContext
     {
-      
+
         public MongoDBContext()
         {
 
@@ -40,14 +37,15 @@ namespace Socloo.Data
                 database.CreateCollection("AnswerSAs");
                 database.CreateCollection("AnswerMCs");
                 database.CreateCollection("Answers");
-            }catch(Exception ex)
-            {
-                throw new Exception(" " +ex);
             }
-      
+            catch (Exception ex)
+            {
+                throw new Exception(" " + ex);
+            }
+
 
         }
-       
+
 
 
 
