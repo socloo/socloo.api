@@ -19,6 +19,7 @@ namespace Socloo.Data
         public string Email { get; set; }
         public string Bio { get; set; }
         public string ProfilePictureId{get;set;}
+
     
 
     }
