@@ -7,14 +7,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Socloo.Data
 {
-    class AnswerMC
+    class AnswerMC : Answer
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("SuperAdmins")]
-        public string Text { get; set; }
+        [BsonElement("AnswerMCs")]
         public string QuestionId { get; set; }
         public bool Correct { get; set; }
         public string Image { get; set; }
