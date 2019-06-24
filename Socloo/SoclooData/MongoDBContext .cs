@@ -1,55 +1,146 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Socloo.Data
 {
     public class MongoDBContext
     {
-
+        public MongoClient client = new MongoClient("mongodb+srv://Admin:admin@socloocluster-xfypo.mongodb.net/test?retryWrites=true&w=majority");
+        public IMongoDatabase database;
         public MongoDBContext()
         {
 
 
-            MongoClient client = new MongoClient("mongodb+srv://Admin:admin@socloocluster-xfypo.mongodb.net/test?retryWrites=true&w=majority");
-            var database = client.GetDatabase("SoclooDevDb");
+            database = client.GetDatabase("SoclooDevDb");
             try
             {
-                database.CreateCollection("Users");
-                database.CreateCollection("Tests");
-                database.CreateCollection("Teachers");
-                database.CreateCollection("SuperAdmins");
-                database.CreateCollection("Students");
-                database.CreateCollection("SchoolAdmins");
-                database.CreateCollection("Schools");
-                database.CreateCollection("Questions");
-                database.CreateCollection("Posts");
-                database.CreateCollection("Porfolios");
-                database.CreateCollection("Occurrences");
-                database.CreateCollection("Messages");
-                database.CreateCollection("Groups");
-                database.CreateCollection("Documents");
-                database.CreateCollection("Dashboards");
-                database.CreateCollection("Courses");
-                database.CreateCollection("Chats");
-                database.CreateCollection("Calendars");
-                database.CreateCollection("Assignments");
-                database.CreateCollection("AnswerTFs");
-                database.CreateCollection("AnswerSAs");
-                database.CreateCollection("AnswerMCs");
-                database.CreateCollection("Answers");
+                List<string> list = database. ListCollectionNames().ToList<string>();
+                Console.WriteLine(list);
+               var b= BsonClassMap.RegisterClassMap<User>();
+                if (!list.Contains("Answer"))
+                {
+                    Collation answer = new Collation("Answer");
+             
+                }
+                if (!!list.Contains("AnswersMCs"))
+                {
+                    database.CreateCollection("AnswerMCs");
+                }
+                if (!list.Contains("AnswerSAs"))
+                {
+                    database.CreateCollection("AnswerSAs");
+                }
+                if (!list.Contains("AnswerTFs"))
+                {
+                    database.CreateCollection("AnswerTFs");
+                }
+                if (!list.Contains("Assignments"))
+                {
+                    database.CreateCollection("Assignments");
+                }
+                if (!list.Contains("Calendars"))
+                {
+                    database.CreateCollection("Calendars");
+                }
+                if (!list.Contains("Chats"))
+                {
+                    database.CreateCollection("Chats");
+                }
+                if (!list.Contains("Courses"))
+                {
+                    database.CreateCollection("Courses");
+                }
+                if (!list.Contains("Dashboards"))
+                {
+                    database.CreateCollection("Dashboards");
+                }
+                if (!list.Contains("Documents"))
+                {
+                    database.CreateCollection("Documents");
+                }
+                if (!list.Contains("Groups"))
+                {
+                    database.CreateCollection("Groups");
+                }
+                if (!list.Contains("Messages"))
+                {
+                    database.CreateCollection("Messages");
+                }
+                if (!list.Contains("Occurrences"))
+                {
+                    database.CreateCollection("Occurrences");
+                }
+                if (!list.Contains("Porfolios"))
+                {
+                    database.CreateCollection("Porfolios");
+                }
+                if (!list.Contains("Posts"))
+                {
+                    database.CreateCollection("Posts");
+                }
+                if (!list.Contains("Questions"))
+                {
+                    database.CreateCollection("Questions");
+                }
+                if (!list.Contains("Schools"))
+                {
+                    database.CreateCollection("Schools");
+                }
+                if (!list.Contains("SchoolAdmins"))
+                {
+                    database.CreateCollection("SchoolAdmins");
+                }
+                if (!list.Contains("Students"))
+                {
+                    database.CreateCollection("Students");
+                }
+                if (!list.Contains("SuperAdmins"))
+                {
+                    database.CreateCollection("SuperAdmins");
+                }
+                if (!list.Contains("Teachers"))
+                {
+                    database.CreateCollection("Teachers");
+                }
+                if (!list.Contains("Tests"))
+                {
+                    database.CreateCollection("Tests");
+                }
+                if (!list.Contains("Users"))
+                {
+                  //  MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer());
+                  database.CreateCollection("Users");
+
+                   // IMongoCollection<User> collection = database.GetCollection<User>("User");
+                //    collection.Indexes.CreateMany(new User);
+
+
+                 //   collection.DocumentSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer()));
+                    
+
+                }
+
+
             }
             catch (Exception ex)
             {
-                throw new Exception(" " + ex);
+
             }
+
+
+
+
 
 
         }
 
 
-
-
-
-
+      
     }
 }
