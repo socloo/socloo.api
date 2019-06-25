@@ -6,13 +6,15 @@ namespace Socloo.Data
 {
     public class Teacher : User
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [BsonElement("Teachers")]
-        public List<Course> Courses { get; set; }
-        public List<Group> Groups { get; set; }
+        public string UserId { get; set; }
+        public List<string> CoursesId { get; set; }
+        public List<string> GroupsId { get; set; }
         public List<int> Subject { get; set; }
     }
 }

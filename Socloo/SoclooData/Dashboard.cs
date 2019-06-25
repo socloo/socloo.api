@@ -11,6 +11,6 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("Dashboards")]
-        public List<Post> Posts { get; set; }
+        public List<string> PostsId { get; set; }
     }
 }

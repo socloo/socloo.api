@@ -11,9 +11,9 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("Chats")]
-        public List<Student> Students { get; set; }
-        public List<Teacher> Teachers { get; set; }
-        public List<Message> Messages { get; set; }
+        public List<string> StudentsId { get; set; }
+        public List<string> TeachersId { get; set; }
+        public List<string> MessagesId { get; set; }
         public string ChatName { get; set; }
         public int ChatType { get; set; }
 

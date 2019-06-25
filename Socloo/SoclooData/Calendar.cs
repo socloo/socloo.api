@@ -12,6 +12,6 @@ namespace Socloo.Data
 
         [BsonElement("Calendars")]
         public string UserId { get; set; }
-        public List<Occurrence> Occurrences { get; set; }
+        public List<string> OccurrencesId { get; set; }
     }
 }

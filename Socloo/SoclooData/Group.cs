@@ -11,8 +11,8 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("Groups")]
-        public List<Student> Students { get; set; }
-        public List<Teacher> Teachers { get; set; }
+        public List<string> StudentsId { get; set; }
+        public List<string> TeachersId { get; set; }
 
         public string Name { get; set; }
         public string Info { get; set; }

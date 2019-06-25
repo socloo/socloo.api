@@ -16,10 +16,10 @@ namespace Socloo.Data
         public string Grade { get; set; }
         public string SchoolBranch { get; set; }
         public string Address { get; set; }
-        public List<SchoolAdmin> Administrators { get; set; }
-        public List<Student> Students { get; set; }
-        public List<Teacher> Teachers { get; set; }
-        public List<Group> Groups { get; set; }
-        public List<Course> Courses { get; set; }
+        public List<string> AdministratorsId { get; set; }
+        public List<string> StudentsId { get; set; }
+        public List<string> TeachersId { get; set; }
+        public List<string> GroupsId { get; set; }
+        public List<string> CoursesId { get; set; }
     }
 }

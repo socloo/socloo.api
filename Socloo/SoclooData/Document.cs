@@ -13,7 +13,7 @@ namespace Socloo.Data
 
         [BsonElement("Documents")]
         public string FileId { get; set; }
-        public List<User> users { get; set; }
+        public List<string> usersId { get; set; }
         public string TeacherId { get; set; }
         public DateTime DateTime { get; set; }
 

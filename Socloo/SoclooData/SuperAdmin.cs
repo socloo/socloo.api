@@ -11,7 +11,7 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("SuperAdmins")]
-
-        public List<School> Schools { get; set; }
+        public string UserId { get; set; }
+        public List<string> SchoolsId { get; set; }
     }
 }

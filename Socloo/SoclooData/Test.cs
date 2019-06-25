@@ -12,11 +12,11 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("Tests")]
-        public List<Teacher> Teachers { get; set; }
-        public List<Student> Students { get; set; }
+        public List<string> TeachersId { get; set; }
+        public List<string> StudentsId { get; set; }
         public TimeSpan TimeMax { get; set; }
         public string PictureId { get; set; }
-        public List<Question> Questions { get; set; }
+        public List<string> QuestionsId { get; set; }
 
         public int Type { get; set; }
 

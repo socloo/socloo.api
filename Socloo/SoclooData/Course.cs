@@ -12,9 +12,9 @@ namespace Socloo.Data
         public string Id { get; set; }
 
         [BsonElement("Courses")]
-        public List<Student> Students { get; set; }
-        public List<Teacher> Teachers { get; set; }
-        public List<Teacher> Coordinators { get; set; }
+        public List<string> StudentsId { get; set; }
+        public List<string> TeachersId { get; set; }
+        public List<string> CoordinatorsId { get; set; }
         public int Grade { get; set; }
         public String Section { get; set; }
         public String SubjectBranch { get; set; }

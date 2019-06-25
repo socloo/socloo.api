@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using SoclooAPI.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
-
+using Newtonsoft.Json;
+using Nancy.Json;
+using MongoDB.Bson.IO;
 
 namespace SoclooAPI.Controllers
 {
@@ -20,52 +22,29 @@ namespace SoclooAPI.Controllers
         public UsersController()
         {
             mongoDB = new MongoDBContext();
+            
         }
         [HttpGet]
-        public List<UserViewModel> Get()
+        public async Task<List<UserViewModel>> Get()
         {
-            var JsonUser= mongoDB.database.GetCollection<UserViewModel>("Users");
-            
-            var AllUsers = mongoDB.database.GetCollection<UserViewModel>("Users").AsQueryable<UserViewModel>().ToList<UserViewModel>();
-
-
-            return AllUsers;
-                //.Find<UserViewModel>(_ => true).ToList;
-                //ToList<UserViewModel>;
-        
+            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
+            return await collection.Find(new BsonDocument()).ToListAsync();
         }
-        [HttpGet("id")]
-        public UserViewModel Get(string id)
+        [HttpGet("{id}")]
+        public async Task<UserViewModel> GetById(string id)
         {
-            var JsonUser = mongoDB.database.GetCollection<UserViewModel>("Users");
-            var AllUsers = mongoDB.database.GetCollection<UserViewModel>("Users").AsQueryable<UserViewModel>();
-            foreach(var user in AllUsers)
+            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
+            var list = collection.Find(new BsonDocument()).ToList();
+
+            foreach (var col in list)
             {
-                if (user.id.Equals(id))
+                if (Convert.ToString(col.id).Equals(id))
                 {
-                    return user;
+                    return col;
                 }
             }
             return null;
-
         }
-        [HttpDelete("id")]
-        public bool Delete(string id)
-        {
-            var JsonUser = mongoDB.database.GetCollection<UserViewModel>("Users");
-            try
-            {
-                JsonUser.FindOneAndDelete(id);
-                
-                return true;
-            }
-            catch(Exception ex)
-            {
-                return false;
-            }
-          
-        }
-
         [HttpPost]
         async public void Post([FromBody] UserViewModel user)
         {
@@ -76,7 +55,7 @@ namespace SoclooAPI.Controllers
 
             var document = new BsonDocument
             {
-                {"Id", ObjectId.GenerateNewId() },
+
                 { "FullName", user.FullName},
                 { "PhoneNumber", user.PhoneNumber},
                 { "Email", user.Email},
@@ -85,28 +64,67 @@ namespace SoclooAPI.Controllers
             };
             var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
             await collection.InsertOneAsync(document);
-           
-            //   await collection.UpdateOneAsync(document);
-       
+
+
+
         }
-        [HttpPut]
-        public bool Put([FromBody] UserViewModel userMod)
+     
+
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] UserViewModel user)
         {
-            var JsonUser = mongoDB.database.GetCollection<UserViewModel>("Users");
-            var AllUsers = mongoDB.database.GetCollection<UserViewModel>("Users").AsQueryable<UserViewModel>();
-            foreach (var user in AllUsers)
+            var document = new BsonDocument
             {
-                if (user.id.Equals(userMod.id))
+                {"_id",id },
+                { "FullName", user.FullName},
+                { "PhoneNumber", user.PhoneNumber},
+                { "Email", user.Email},
+                { "Bio", user.Bio},
+                { "ProfilePictureId", user.ProfilePictureId}
+            };
+            try
+            {
+                var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
+                var filter = Builders<UserViewModel>.Filter.Eq("_id", id);
+                await collection.FindOneAndReplaceAsync(x => "_id" == id, document);
+                return true;
+            }
+            catch(Exception ex){
+                return false;
+            }
+          
+           
+
+        }
+
+
+
+
+        [HttpDelete("{id}")]
+        public async Task<bool> DeleteUserById(string id)
+        {
+            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
+            var list = collection.Find(new BsonDocument()).ToList();
+            foreach (var col in list)
+            {
+                if (Convert.ToString(col.id).Equals(id))
                 {
-                    user.PhoneNumber = userMod.PhoneNumber;
-                    user.Bio = user.Bio;
-                    user.Email = user.Email;
-                    user.FullName = user.FullName;
-                    user.ProfilePictureId = user.ProfilePictureId;
+                    var filter = Builders<UserViewModel>.Filter.Eq("_id", col.id);
+                   
+                    await collection.DeleteOneAsync(filter);
+
                     return true;
                 }
             }
             return false;
+
+
         }
+    
+
+
+
+        
+        
     }
 }
