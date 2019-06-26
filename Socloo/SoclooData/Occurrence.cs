@@ -12,7 +12,7 @@ namespace Socloo.Data
 
         [BsonElement("Occurrences")]
         public int Type { get; set; }
-        public string TeacherId { get; set; }
+        public ObjectId TeacherId { get; set; }
         public DateTime Date { get; set; }
         public string Info { get; set; }
 

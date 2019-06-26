@@ -8,12 +8,12 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("Chats")]
-        public List<string> StudentsId { get; set; }
-        public List<string> TeachersId { get; set; }
-        public List<string> MessagesId { get; set; }
+        public List<ObjectId> StudentsId { get; set; }
+        public List<ObjectId> TeachersId { get; set; }
+        public List<ObjectId> MessagesId { get; set; }
         public string ChatName { get; set; }
         public int ChatType { get; set; }
 

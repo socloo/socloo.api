@@ -9,12 +9,12 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("Documents")]
         public string FileId { get; set; }
-        public List<string> usersId { get; set; }
-        public string TeacherId { get; set; }
+        public List<ObjectId> usersId { get; set; }
+        public ObjectId TeacherId { get; set; }
         public DateTime DateTime { get; set; }
 
     }

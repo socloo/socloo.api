@@ -16,10 +16,10 @@ namespace Socloo.Data
         public IMongoDatabase database;
         public MongoDBContext()
         {
-            
+
 
             database = client.GetDatabase("SoclooDevDb");
-          
+
             try
             {
                 List<string> list = database. ListCollectionNames().ToList<string>();

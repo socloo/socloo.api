@@ -8,9 +8,9 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("AnswerSAs")]
-        public string QuestionId { get; set; }
+        public ObjectId QuestionId { get; set; }
     }
 }

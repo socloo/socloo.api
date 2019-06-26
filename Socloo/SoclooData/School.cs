@@ -8,7 +8,7 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("Schools")]
 
@@ -16,10 +16,10 @@ namespace Socloo.Data
         public string Grade { get; set; }
         public string SchoolBranch { get; set; }
         public string Address { get; set; }
-        public List<string> AdministratorsId { get; set; }
-        public List<string> StudentsId { get; set; }
-        public List<string> TeachersId { get; set; }
-        public List<string> GroupsId { get; set; }
-        public List<string> CoursesId { get; set; }
+        public List<ObjectId> AdministratorsId { get; set; }
+        public List<ObjectId> StudentsId { get; set; }
+        public List<ObjectId> TeachersId { get; set; }
+        public List<ObjectId> GroupsId { get; set; }
+        public List<ObjectId> CoursesId { get; set; }
     }
 }

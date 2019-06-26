@@ -8,10 +8,10 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("SuperAdmins")]
-        public string UserId { get; set; }
-        public List<string> SchoolsId { get; set; }
+        public ObjectId UserId { get; set; }
+        public List<ObjectId> SchoolsId { get; set; }
     }
 }

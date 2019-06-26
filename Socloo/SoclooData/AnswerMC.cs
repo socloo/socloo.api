@@ -8,11 +8,11 @@ namespace Socloo.Data
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
         [BsonElement("AnswerMCs")]
         public string Text { get; set; }
-        public string QuestionId { get; set; }
+        public ObjectId QuestionId { get; set; }
         public bool Correct { get; set; }
         public string Image { get; set; }
 
