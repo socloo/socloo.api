@@ -8,14 +8,12 @@ using MongoDB.Driver;
 
 namespace SoclooAPI.Models
 {
-    public class UserViewModel
+    public class TeacherViewModel
     {
         public ObjectId id { get; set; }
-
-        public string FullName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string Bio { get; set; }
-        public string ProfilePictureId { get; set; }
+        public ObjectId UserId { get; set; }
+        public List<ObjectId> CoursesId { get; set; }
+        public List<ObjectId> GroupsId { get; set; }
+        public List<ObjectId> Subject { get; set; }
     }
 }

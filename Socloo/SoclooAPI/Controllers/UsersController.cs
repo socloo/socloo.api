@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using Newtonsoft.Json;
 using Nancy.Json;
 using MongoDB.Bson.IO;
+using Newtonsoft.Json.Linq;
 
 namespace SoclooAPI.Controllers
 {
@@ -24,31 +25,39 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
             
         }
+
         [HttpGet]
         public async Task<List<UserViewModel>> Get()
         {
-            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
-            return await collection.Find(new BsonDocument()).ToListAsync();
+            try
+            {
+                return await mongoDB.database.GetCollection<UserViewModel>("Users").Find(new BsonDocument()).ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
+
         [HttpGet("{id}")]
         public async Task<UserViewModel> GetById(string id)
         {
-            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
-            var list = collection.Find(new BsonDocument()).ToList();
-
-            foreach (var col in list)
+            try
             {
-                if (Convert.ToString(col.id).Equals(id))
-                {
-                    return col;
-                }
+                var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
+                var filter = Builders<UserViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var result = await collection.Find(filter).ToListAsync();
+                return result[0];
             }
-            return null;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
+
         [HttpPost]
         async public void Post([FromBody] UserViewModel user)
         {
- 
             var document = new BsonDocument
             {
 
@@ -58,11 +67,7 @@ namespace SoclooAPI.Controllers
                 { "Bio", user.Bio},
                 { "ProfilePictureId", user.ProfilePictureId}
             };
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
-            await collection.InsertOneAsync(document);
-
-
-
+            await mongoDB.database.GetCollection<BsonDocument>("Users").InsertOneAsync(document);
         }
      
 
@@ -72,7 +77,6 @@ namespace SoclooAPI.Controllers
         
             var document = new BsonDocument
             {
-               // {"_id", id },
                 { "FullName", user.FullName},
                 { "PhoneNumber", user.PhoneNumber},
                 { "Email", user.Email},
@@ -81,50 +85,32 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
+                 var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
                  var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-
-
                  await collection.FindOneAndReplaceAsync(filter, document);
-
-                return true;
+                 return true;
             }
             catch(Exception ex){
                 return false;
-            }
-          
-           
-
+            }   
         }
-
-
 
 
         [HttpDelete("{id}")]
         public async Task<bool> DeleteUserById(string id)
         {
-            var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
-            var list = collection.Find(new BsonDocument()).ToList();
-            foreach (var col in list)
+            try
             {
-                if (Convert.ToString(col.id).Equals(id))
-                {
-                    var filter = Builders<UserViewModel>.Filter.Eq("_id", col.id);
-                   
-                    await collection.DeleteOneAsync(filter);
-
-                    return true;
-                }
+                var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
+                var filter = Builders<UserViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                await collection.DeleteOneAsync(filter);
+                return true;
             }
-            return false;
-
-
+            catch(Exception ex)
+            {
+                return false;
+            }
+            
         }
-    
-
-
-
-        
-        
     }
 }
