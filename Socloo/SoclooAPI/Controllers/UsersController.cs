@@ -48,11 +48,7 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         async public void Post([FromBody] UserViewModel user)
         {
-            /*
-            var JsonUser = mongoDB.database.GetCollection<UserViewModel>("Users");
-            JsonUser.InsertOne(user);
-            */
-
+ 
             var document = new BsonDocument
             {
 
@@ -73,9 +69,10 @@ namespace SoclooAPI.Controllers
         [HttpPut("{id}")]
         async public Task<bool> Put(string id, [FromBody] UserViewModel user)
         {
+        
             var document = new BsonDocument
             {
-                {"_id",id },
+               // {"_id", id },
                 { "FullName", user.FullName},
                 { "PhoneNumber", user.PhoneNumber},
                 { "Email", user.Email},
@@ -85,8 +82,11 @@ namespace SoclooAPI.Controllers
             try
             {
                 var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
-                var filter = Builders<UserViewModel>.Filter.Eq("_id", id);
-                await collection.FindOneAndReplaceAsync(x => "_id" == id, document);
+                 var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+
+
+                 await collection.FindOneAndReplaceAsync(filter, document);
+
                 return true;
             }
             catch(Exception ex){
