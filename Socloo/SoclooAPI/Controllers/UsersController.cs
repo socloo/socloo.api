@@ -97,7 +97,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteUserById(string id)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {

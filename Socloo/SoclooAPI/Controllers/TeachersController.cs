@@ -25,16 +25,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
+
         public async Task<List<TeacherViewModel>> Get()
         {
-            try
-            {
-                return await mongoDB.database.GetCollection<TeacherViewModel>("Teachers").Find(new BsonDocument()).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            var collection = mongoDB.database.GetCollection<TeacherViewModel>("Teachers");
+            return await collection.Find(new BsonDocument()).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -53,8 +48,23 @@ namespace SoclooAPI.Controllers
             }
         }
 
+        [HttpPost]
+        async public void Post([FromBody] TeacherViewModel teacher)
+        {
+            List<ObjectId> list = new List<ObjectId>();
+            var bsonarray = new BsonArray(list);
+            var document = new BsonDocument
+            {
+                 { "UserId", teacher.UserId},
+                 { "CoursesId", bsonarray},
+                 { "GroupsId",bsonarray},
+                { "Subject", bsonarray},
+            };
+            await mongoDB.database.GetCollection<BsonDocument>("Teachers").InsertOneAsync(document);
+        }
+
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteTeacherById(string id)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
