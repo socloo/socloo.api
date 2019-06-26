@@ -83,8 +83,6 @@ namespace SoclooAPI.Controllers
             {
                 var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
                  var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-
-
                  await collection.FindOneAndReplaceAsync(filter, document);
 
                 return true;
