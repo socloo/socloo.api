@@ -86,7 +86,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
+                var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
                 var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.FindOneAndReplaceAsync(filter, document);
                 return true;
@@ -103,7 +103,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<StudentViewModel>("Users");
+                var collection = mongoDB.database.GetCollection<StudentViewModel>("Students");
                 var filter = Builders<StudentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
