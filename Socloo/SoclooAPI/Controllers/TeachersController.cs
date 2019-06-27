@@ -25,11 +25,18 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
-
         public async Task<List<TeacherViewModel>> Get()
         {
-            var collection = mongoDB.database.GetCollection<TeacherViewModel>("Teachers");
-            return await collection.Find(new BsonDocument()).ToListAsync();
+            try
+            {
+                return await mongoDB.database.GetCollection<TeacherViewModel>("Teachers").Find(new BsonDocument()).ToListAsync();
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [HttpGet("{id}")]
@@ -69,10 +76,10 @@ namespace SoclooAPI.Controllers
 
             var document = new BsonDocument
             {
-                { "userId", teacher.UserId},
-                { "coursesId", new BsonArray(teacher.CoursesId)},
-                { "groupsId", new BsonArray(teacher.GroupsId)},
-                { "subject", new BsonArray(teacher.Subject)}
+                { "UserId", teacher.UserId},
+                { "CoursesId", new BsonArray(teacher.CoursesId)},
+                { "GroupsId", new BsonArray(teacher.GroupsId)},
+                { "Subject", new BsonArray(teacher.Subject)}
             };
             try
             {
