@@ -11,9 +11,17 @@ namespace SoclooAPI.Models
     public class TeacherViewModel
     {
         public ObjectId id { get; set; }
-        public ObjectId UserId { get; set; }
-        public List<ObjectId> CoursesId { get; set; }
-        public List<ObjectId> GroupsId { get; set; }
-        public List<ObjectId> Subject { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+
+        public string UserId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+
+        public List<string> CoursesId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+
+        public List<string> GroupsId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+
+        public List<string> Subject { get; set; }
     }
 }
