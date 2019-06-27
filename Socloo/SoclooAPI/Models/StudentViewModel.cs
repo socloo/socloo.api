@@ -9,7 +9,7 @@ namespace SoclooAPI.Models
     public class StudentViewModel
     {
 
-        public ObjectId Id { get; set; }
+        public ObjectId id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
