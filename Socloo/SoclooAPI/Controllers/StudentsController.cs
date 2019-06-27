@@ -60,11 +60,11 @@ namespace SoclooAPI.Controllers
             var bsonarray = new BsonArray(list);
             var document = new BsonDocument
             {
-                 { "UserId", ObjectId.Parse(student.UserId)},
-                 { "TeachersId", bsonarray},
-                 { "CoursesId",bsonarray},
+                { "UserId", ObjectId.Parse(student.UserId)},
+                { "TeachersId", bsonarray},
+                { "CoursesId",bsonarray},
                 { "GroupsId", bsonarray},
-                { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
+              { "PortfolioId", ObjectId.Empty},
             };
 
             var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
