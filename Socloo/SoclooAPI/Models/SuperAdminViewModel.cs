@@ -13,9 +13,12 @@ namespace SoclooAPI.Models
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
-        public List<ObjectId> TeachersId { get; set; }
-        public List<ObjectId> CoursesId { get; set; }
-        public List<ObjectId> GroupsId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> TeachersId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> CoursesId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> GroupsId { get; set; }
         public int Type { get; set; }
     }
 }

@@ -38,19 +38,13 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-       /* public async Task<StudentViewModel> GetById(string id)
+        public async Task<StudentViewModel> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<StudentViewModel>("Users");
+                var filter = Builders<StudentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
-                var student = new StudentViewModel
-                {
-                    CoursesId =,
-
-                };
-
                 return result[0];
             }
             catch (Exception ex)
@@ -58,7 +52,7 @@ namespace SoclooAPI.Controllers
                 return null;
             }
         }
-        */
+        
         [HttpPost]
         async public void Post([FromBody] StudentViewModel student)
         {
@@ -78,5 +72,47 @@ namespace SoclooAPI.Controllers
 
         }
 
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] StudentViewModel student)
+        {
+
+            var document = new BsonDocument
+            {
+                 { "UserId", ObjectId.Parse(student.UserId)},
+                 { "TeachersId", new BsonArray(student.TeachersId)},
+                 { "CoursesId",new BsonArray(student.CoursesId)},
+                { "GroupsId", new BsonArray(student.GroupsId)},
+                { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
+            };
+            try
+            {
+                var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
+                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+                await collection.FindOneAndReplaceAsync(filter, document);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<bool> DeleteById(string id)
+        {
+            try
+            {
+                var collection = mongoDB.database.GetCollection<StudentViewModel>("Students");
+                var filter = Builders<StudentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                await collection.DeleteOneAsync(filter);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }
