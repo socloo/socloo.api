@@ -8,13 +8,17 @@ namespace SoclooAPI.Models
 {
     public class StudentViewModel
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
 
-        
+        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
-        public List<ObjectId> CoursesId { get; set; }
-        public List<ObjectId> GroupsId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> CoursesId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> GroupsId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+
+        public List<string> TeachersId { get; set; }
         public string PortfolioId { get; set; }
 
     }
