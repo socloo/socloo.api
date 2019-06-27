@@ -63,6 +63,31 @@ namespace SoclooAPI.Controllers
             await mongoDB.database.GetCollection<BsonDocument>("Teachers").InsertOneAsync(document);
         }
 
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] TeacherViewModel teacher)
+        {
+
+            var document = new BsonDocument
+            {
+                { "userId", teacher.UserId},
+                { "coursesId", new BsonArray(teacher.CoursesId)},
+                { "groupsId", new BsonArray(teacher.GroupsId)},
+                { "subject", new BsonArray(teacher.Subject)}
+            };
+            try
+            {
+                var collection = mongoDB.database.GetCollection<BsonDocument>("Teachers");
+                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+                await collection.FindOneAndReplaceAsync(filter, document);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<bool> DeleteById(string id)
         {
