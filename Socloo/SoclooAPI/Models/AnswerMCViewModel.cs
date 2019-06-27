@@ -1,11 +1,14 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
-namespace Socloo.Data
+using MongoDB.Driver;
+namespace SoclooAPI.Models
 {
-    public class AnswerMC : Answer
-    { 
+    public class AnswerMCViewModel
+    {
         public ObjectId Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string AnswerId { get; set; }
@@ -14,6 +17,5 @@ namespace Socloo.Data
         public string QuestionId { get; set; }
         public bool Correct { get; set; }
         public string Image { get; set; }
-
     }
 }
