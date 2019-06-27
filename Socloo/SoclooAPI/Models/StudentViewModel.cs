@@ -8,6 +8,7 @@ namespace SoclooAPI.Models
 {
     public class StudentViewModel
     {
+        [BsonId]
         public ObjectId Id { get; set; }
 
         
