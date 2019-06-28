@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Nancy.Json;
 using MongoDB.Bson.IO;
 using MongoDB.Driver.GridFS;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SoclooAPI.Controllers
 {
@@ -52,7 +53,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public bool DownLoadFiles(String id)
+        public bool DownLoadFiles(String id,string url)
         {
             
             try
@@ -63,10 +64,13 @@ namespace SoclooAPI.Controllers
 
                 };
                 var fs = new GridFSBucket(mongoDB.database);
-                var fileDate = mongoDB.database.GetCollection<FileViewModel>("fs.files").Find(new BsonDocument()).ToList();
+                var collection = mongoDB.database.GetCollection<FileViewModel>("fs.files");
+                var filter = Builders<FileViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var result = collection.Find(filter).ToList();
+                var fileDate = result[0];
                 var f = fs.DownloadAsBytes(ObjectId.Parse(id));
-                var 
-                System.IO.File.WriteAllBytes(@"C:\Users\nicco\Downloads\prova7.pdf", f);
+                var path = Path.Combine(url, fileDate.filename);
+                System.IO.File.WriteAllBytes(@path, f);
                 return true;
             }
             catch (Exception ex)

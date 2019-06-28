@@ -9,12 +9,12 @@ namespace SoclooAPI.Models
 {
     public class FileViewModel
     {
-        public ObjectId Id { get; set; }
-        public int Length { get; set; }
-        public int ChunkSize { get; set; }
+        public ObjectId id { get; set; }
+        public int length { get; set; }
+        public int chunkSize { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime UploadDate { get; set; }
-        public string Md5 { get; set; }
-        public string Filename { get; set; }
+        public DateTime uploadDate { get; set; }
+        public string md5 { get; set; }
+        public string filename { get; set; }
     }
 }
