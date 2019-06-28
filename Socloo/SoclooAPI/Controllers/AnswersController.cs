@@ -62,7 +62,8 @@ namespace SoclooAPI.Controllers
         {
             var document = new BsonDocument
                 {
-                     { "Text", answer.Text}
+                     { "SubclassId", answer.SubclassId},
+                     { "SubclassType", answer.SubclassType}
                 };
             await mongoDB.database.GetCollection<BsonDocument>("Answers").InsertOneAsync(document);
         }
@@ -73,7 +74,8 @@ namespace SoclooAPI.Controllers
 
             var document = new BsonDocument
             {
-                { "Text", answer.Text}
+                { "SubclassId", ObjectId.Parse(answer.SubclassId)},
+                { "SubclassType", answer.SubclassType}
             };
             try
             {
