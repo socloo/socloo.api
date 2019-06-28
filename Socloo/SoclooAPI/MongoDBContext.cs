@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Socloo.Data
+namespace SoclooAPI
 {
     public class MongoDBContext
     {
@@ -21,14 +21,12 @@ namespace Socloo.Data
 
             try
             {
-                List<string> list = database. ListCollectionNames().ToList<string>();
-                Console.WriteLine(list);
-               var b= BsonClassMap.RegisterClassMap<User>();
-                
+                List<string> list = database.ListCollectionNames().ToList<string>();
+       
                 if (!list.Contains("Answer"))
                 {
                     database.CreateCollection("Answer");
-             
+
                 }
                 if (!!list.Contains("AnswersMCs"))
                 {
@@ -116,15 +114,15 @@ namespace Socloo.Data
                 }
                 if (!list.Contains("Users"))
                 {
-                  //  MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer());
-                  database.CreateCollection("Users");
+                    //  MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer());
+                    database.CreateCollection("Users");
 
-                   // IMongoCollection<User> collection = database.GetCollection<User>("User");
-                //    collection.Indexes.CreateMany(new User);
+                    // IMongoCollection<User> collection = database.GetCollection<User>("User");
+                    //    collection.Indexes.CreateMany(new User);
 
 
-                 //   collection.DocumentSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer()));
-                    
+                    //   collection.DocumentSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer()));
+
 
                 }
 
@@ -143,6 +141,6 @@ namespace Socloo.Data
         }
 
 
-      
+
     }
 }

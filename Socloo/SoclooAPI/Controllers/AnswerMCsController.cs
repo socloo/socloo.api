@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Socloo.Data;
 using Microsoft.AspNetCore.Mvc;
 using SoclooAPI.Models;
 using MongoDB.Driver;
