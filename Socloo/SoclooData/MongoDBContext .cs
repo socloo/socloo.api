@@ -11,7 +11,6 @@ namespace Socloo.Data
 {
     public class MongoDBContext
     {
-
         public MongoClient client = new MongoClient("mongodb+srv://Admin:admin@socloocluster-xfypo.mongodb.net/test?retryWrites=true&w=majority");
         public IMongoDatabase database;
         public MongoDBContext()
@@ -25,9 +24,10 @@ namespace Socloo.Data
                 List<string> list = database. ListCollectionNames().ToList<string>();
                 Console.WriteLine(list);
                var b= BsonClassMap.RegisterClassMap<User>();
+                
                 if (!list.Contains("Answer"))
                 {
-                    Collation answer = new Collation("Answer");
+                    database.CreateCollection("Answer");
              
                 }
                 if (!!list.Contains("AnswersMCs"))
