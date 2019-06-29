@@ -59,7 +59,7 @@ namespace SoclooAPI.Controllers
             var bsonarray = new BsonArray(list);
             var document = new BsonDocument
             {
-                {"FileId",doc.FileId },
+                {"FileId",ObjectId.Parse(doc.FileId) },
                  { "UsersId", bsonarray},
                  { "TeacherId", ObjectId.Parse(doc.TeacherId)},
                   { "DateTime",Convert.ToDateTime(doc.DateTime)},
@@ -80,7 +80,7 @@ namespace SoclooAPI.Controllers
             {
                 var document = new BsonDocument
             {
-                 {"FileId",doc.FileId },
+                 {"FileId",ObjectId.Parse(doc.FileId)  },
                  { "UsersId", new BsonArray(doc.UsersId)},
                  { "TeacherId", ObjectId.Parse(doc.TeacherId)},
                 { "DateTime",Convert.ToDateTime(doc.DateTime)},

@@ -81,7 +81,7 @@ namespace SoclooAPI.Controllers
                 { "TeachersId", new BsonArray(group.TeachersId)},
                 { "Name", "" + group.Name},
                 { "Info", "" + group.Info},
-                { "PictureId", "" + group.PictureId},
+                { "PictureId", ObjectId.Parse(group.PictureId)},
             };
             try
             {

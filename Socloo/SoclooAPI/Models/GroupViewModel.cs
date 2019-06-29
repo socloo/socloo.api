@@ -19,6 +19,7 @@ namespace SoclooAPI.Models
 
         public string Name { get; set; }
         public string Info { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
         public string PictureId { get; set; }
     }
 }

@@ -63,7 +63,7 @@ namespace SoclooAPI.Controllers
                 { "PhoneNumber", user.PhoneNumber},
                 { "Email", user.Email},
                 { "Bio", user.Bio},
-                { "ProfilePictureId", user.ProfilePictureId}
+                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
             };
             await mongoDB.database.GetCollection<BsonDocument>("Users").InsertOneAsync(document);
         }
@@ -79,7 +79,7 @@ namespace SoclooAPI.Controllers
                 { "PhoneNumber", user.PhoneNumber},
                 { "Email", user.Email},
                 { "Bio", user.Bio},
-                { "ProfilePictureId", user.ProfilePictureId}
+                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
             };
             try
             {

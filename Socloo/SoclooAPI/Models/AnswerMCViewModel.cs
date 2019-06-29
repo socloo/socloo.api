@@ -16,6 +16,7 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string QuestionId { get; set; }
         public bool Correct { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Image { get; set; }
     }
 }

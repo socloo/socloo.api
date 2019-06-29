@@ -18,6 +18,7 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.DateTime)]
         public string ExpirationDate { get; set; }
         public string Info { get; set; }
+        [BsonRepresentation(BsonType.DateTime)]
         public string FileId { get; set; }
     }
 }

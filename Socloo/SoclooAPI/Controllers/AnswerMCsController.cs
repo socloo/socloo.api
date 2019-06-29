@@ -65,7 +65,7 @@ namespace SoclooAPI.Controllers
                  { "Text", answerMC.Text},
                  { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                  { "Correct", answerMC.Correct},
-                 { "Image", answerMC.Image}
+                 { "Image",  ObjectId.Parse(answerMC.Image)}
             };
             await mongoDB.database.GetCollection<BsonDocument>("AnswerMCs").InsertOneAsync(document);
         }
@@ -80,7 +80,7 @@ namespace SoclooAPI.Controllers
                  { "Text", answerMC.Text},
                  { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                  { "Correct", answerMC.Correct},
-                 { "Image", answerMC.Image}
+                 { "Image", ObjectId.Parse(answerMC.Image)}
             };
             try
             {
