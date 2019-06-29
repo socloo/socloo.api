@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SoclooAPI.Models
 {

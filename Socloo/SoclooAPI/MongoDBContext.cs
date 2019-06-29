@@ -1,9 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,7 +18,7 @@ namespace SoclooAPI
             try
             {
                 List<string> list = database.ListCollectionNames().ToList<string>();
-       
+
                 if (!list.Contains("Answer"))
                 {
                     database.CreateCollection("Answer");

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using Microsoft.Extensions.Caching.Memory;
+using SoclooAPI.Models;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace SoclooAPI.Controllers
 {
@@ -34,7 +27,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                
+
                 var fs = new GridFSBucket(mongoDB.database);
                 var f = System.IO.File.OpenRead(path);
                 byte[] bytes = System.IO.File.ReadAllBytes(path);
@@ -53,9 +46,9 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public bool DownLoadFiles(String id,string url)
+        public bool DownLoadFiles(String id, string url)
         {
-            
+
             try
             {
                 var option = new GridFSUploadOptions
