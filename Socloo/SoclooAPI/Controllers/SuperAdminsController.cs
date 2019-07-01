@@ -58,7 +58,6 @@ namespace SoclooAPI.Controllers
                  { "TeachersId", bsonarray},
                  { "CoursesId",bsonarray},
                 { "GroupsId", bsonarray},
-                { "Type", admin.Type},
             };
 
             var collection = mongoDB.database.GetCollection<BsonDocument>("SuperAdmins");
@@ -79,7 +78,6 @@ namespace SoclooAPI.Controllers
                  { "TeachersId", new BsonArray(admin.TeachersId)},
                  { "CoursesId",new BsonArray(admin.CoursesId)},
                 { "GroupsId",new BsonArray(admin.GroupsId)},
-                { "Type", admin.Type},
             };
 
                 var collection = mongoDB.database.GetCollection<BsonDocument>("SuperAdmins");

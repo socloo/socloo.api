@@ -69,7 +69,7 @@ namespace SoclooAPI.Controllers
         [HttpPut("{id}")]
         async public Task<bool> Put(string id, [FromBody] PostViewModel post)
         {
-
+            
             try
             {
                 var document = new BsonDocument

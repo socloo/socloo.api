@@ -1,13 +1,12 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
+using System;
 
 namespace SoclooAPI.Models
 {
     public class PostViewModel
     {
 
-        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
@@ -15,6 +14,6 @@ namespace SoclooAPI.Models
         public string Content { get; set; }
         public int Type { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public string PostDate { get; set; }
+        public DateTime PostDate { get; set; }
     }
 }

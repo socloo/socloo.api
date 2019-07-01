@@ -16,6 +16,5 @@ namespace SoclooAPI.Models
         public List<string> CoursesId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> GroupsId { get; set; }
-        public int Type { get; set; }
     }
 }
