@@ -7,9 +7,7 @@ namespace SoclooAPI.Models
     {
         public ObjectId Id { get; set; }
         public string Text { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
 
-        public string AnswerId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
 
         public string QuestionId { get; set; }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace SoclooAPI.Models
 {
@@ -9,7 +10,7 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public string DataTime { get; set; }
+        public DateTime DataTime { get; set; }
 
         public string MessageText { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]

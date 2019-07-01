@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 namespace SoclooAPI.Models
 {
@@ -13,9 +14,9 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> StudentsId { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public string ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public string Info { get; set; }
-        [BsonRepresentation(BsonType.DateTime)]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string FileId { get; set; }
     }
 }

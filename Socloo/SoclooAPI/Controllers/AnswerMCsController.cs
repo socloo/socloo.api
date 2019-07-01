@@ -56,7 +56,6 @@ namespace SoclooAPI.Controllers
             var bsonarray = new BsonArray(list);
             var document = new BsonDocument
             {
-                 { "AnswerId", ObjectId.Parse(answerMC.AnswerId)},
                  { "Text", answerMC.Text},
                  { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                  { "Correct", answerMC.Correct},
@@ -71,7 +70,6 @@ namespace SoclooAPI.Controllers
 
             var document = new BsonDocument
             {
-                 { "AnswerId", ObjectId.Parse(answerMC.AnswerId)},
                  { "Text", answerMC.Text},
                  { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                  { "Correct", answerMC.Correct},

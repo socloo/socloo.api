@@ -6,6 +6,7 @@ using SoclooAPI.Models;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
@@ -33,7 +34,7 @@ namespace SoclooAPI.Controllers
                 byte[] bytes = System.IO.File.ReadAllBytes(path);
                 var option = new GridFSUploadOptions
                 {
-
+                    
 
                 };
                 fs.UploadFromBytes(filename, bytes, option);
@@ -46,6 +47,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
+
         public bool DownLoadFiles(String id, string url)
         {
 
@@ -70,6 +72,22 @@ namespace SoclooAPI.Controllers
             {
                 return false;
             }
+        }
+        [HttpDelete("{id}")]
+        public async Task<bool> DeleteById(string id)
+        {
+            try
+            {
+                var collection = mongoDB.database.GetCollection<FileViewModel>("fs.files");
+                var filter = Builders<FileViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                await collection.DeleteOneAsync(filter);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }
