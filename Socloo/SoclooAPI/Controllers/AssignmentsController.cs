@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
+using SoclooAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -62,7 +57,7 @@ namespace SoclooAPI.Controllers
                  { "StudentsId", bsonarray},
                  { "ExpirationDate",Convert.ToDateTime(assignment.ExpirationDate)},
                 { "Info", assignment.Info},
-                { "FileId", assignment.FileId},
+                { "FileId", ObjectId.Parse(assignment.FileId)},
             };
 
             var collection = mongoDB.database.GetCollection<BsonDocument>("Assignments");
@@ -84,7 +79,7 @@ namespace SoclooAPI.Controllers
                  { "StudentsId", new BsonArray(assignment.StudentsId)},
                 { "ExpirationDate",Convert.ToDateTime(assignment.ExpirationDate)},
                 { "Info", assignment.Info},
-                { "FileId", assignment.FileId}
+                { "FileId", ObjectId.Parse(assignment.FileId)}
             };
 
                 var collection = mongoDB.database.GetCollection<BsonDocument>("Assignments");

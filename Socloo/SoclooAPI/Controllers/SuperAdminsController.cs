@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
+using SoclooAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
@@ -28,8 +23,8 @@ namespace SoclooAPI.Controllers
             try
             {
                 return await mongoDB.database.GetCollection<SuperAdminViewModel>("SuperAdmins").Find(new BsonDocument()).ToListAsync();
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -86,7 +81,7 @@ namespace SoclooAPI.Controllers
                 { "GroupsId",new BsonArray(admin.GroupsId)},
                 { "Type", admin.Type},
             };
-           
+
                 var collection = mongoDB.database.GetCollection<BsonDocument>("SuperAdmins");
                 var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.FindOneAndReplaceAsync(filter, document);

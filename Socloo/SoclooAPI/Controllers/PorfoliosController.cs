@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
+using SoclooAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -37,7 +32,7 @@ namespace SoclooAPI.Controllers
 
         [HttpGet("{id}")]
         public async Task<PorfolioViewModel> GetById(string id)
-            {
+        {
             try
             {
                 var collection = mongoDB.database.GetCollection<PorfolioViewModel>("Porfolios");

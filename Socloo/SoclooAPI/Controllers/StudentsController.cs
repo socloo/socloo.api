@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SoclooAPI.Models;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
-using Nancy.Json;
-using MongoDB.Bson.IO;
+using MongoDB.Driver;
+using SoclooAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -26,8 +21,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-               return await mongoDB.database.GetCollection<StudentViewModel>("Students").Find(new BsonDocument()).ToListAsync();
-                
+                return await mongoDB.database.GetCollection<StudentViewModel>("Students").Find(new BsonDocument()).ToListAsync();
+
 
             }
             catch (Exception ex)
@@ -50,7 +45,7 @@ namespace SoclooAPI.Controllers
                 return null;
             }
         }
-        
+
         [HttpPost]
         async public void Post([FromBody] StudentViewModel student)
         {
