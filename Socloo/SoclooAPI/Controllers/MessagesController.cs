@@ -55,7 +55,7 @@ namespace SoclooAPI.Models
             var document = new BsonDocument
             {
                  { "UserId", ObjectId.Parse(message.UserId)},
-                 { "DateTime", Convert.ToDateTime(message.DataTime)},
+                 { "DataTime", Convert.ToDateTime(message.DataTime)},
                  { "MessageText",message.MessageText},
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
             };
@@ -75,7 +75,7 @@ namespace SoclooAPI.Models
                 var document = new BsonDocument
             {
                   { "UserId", ObjectId.Parse(message.UserId)},
-                 { "DateTime", Convert.ToDateTime(message.DataTime)},
+                 { "DataTime", Convert.ToDateTime(message.DataTime)},
                  { "MessageText",message.MessageText},
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
             };

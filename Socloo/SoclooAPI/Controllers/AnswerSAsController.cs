@@ -58,7 +58,6 @@ namespace SoclooAPI.Controllers
             var document = new BsonDocument
             {
                  { "Text", answerSA.Text},
-                 { "AnswerId", ObjectId.Parse(answerSA.AnswerId)},
                  { "QuestionId",ObjectId.Parse(answerSA.QuestionId)}
             };
             await mongoDB.database.GetCollection<BsonDocument>("AnswerSAs").InsertOneAsync(document);
@@ -71,7 +70,6 @@ namespace SoclooAPI.Controllers
             var document = new BsonDocument
             {
                 { "Text", answerSA.Text},
-                { "AnswerId", ObjectId.Parse(answerSA.AnswerId)},
                 { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
             };
             try
