@@ -56,8 +56,7 @@ namespace SoclooAPI.Controllers
 
             var document = new BsonDocument
             {
-                 { "StudentsId", bsonarray},
-                 { "TeachersId",bsonarray},
+                 { "UsersId",bsonarray},
                 { "MessagesId", bsonarray},
                 {"ChatName",chat.ChatName },
                 { "ChatType", chat.ChatType},
@@ -77,8 +76,7 @@ namespace SoclooAPI.Controllers
             {
                 var document = new BsonDocument
             {
-                 { "StudentsId", new BsonArray(chat.StudentsId)},
-                 { "TeachersId", new BsonArray(chat.TeachersId)},
+                 { "UsersId", new BsonArray(chat.UsersId)},
                  { "MessagesId",new BsonArray(chat.MessagesId)},
                  {"ChatName",chat.ChatName },
                 { "ChatType", chat.ChatType},
