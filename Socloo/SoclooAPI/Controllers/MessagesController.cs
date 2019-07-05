@@ -52,6 +52,7 @@ namespace SoclooAPI.Models
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
+            message.MessageText = new Filter().RemoveBadWord(message.MessageText);
             var document = new BsonDocument
             {
                  { "UserId", ObjectId.Parse(message.UserId)},
