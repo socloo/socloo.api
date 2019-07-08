@@ -14,7 +14,7 @@ namespace SoclooAPI.Models
         public string RemoveBadWord(string Text)
         {
             mongoDB = new MongoDBContext();
-             List<FilterViewModel> it = mongoDB.database.GetCollection<FilterViewModel>("Italian Bad Words").Find(new BsonDocument()).ToList();
+            List<FilterViewModel> it = mongoDB.database.GetCollection<FilterViewModel>("Italian Bad Words").Find(new BsonDocument()).ToList();
             List<FilterViewModel> fr = mongoDB.database.GetCollection<FilterViewModel>("French Bad Words").Find(new BsonDocument()).ToList();
             List<FilterViewModel> de = mongoDB.database.GetCollection<FilterViewModel>("German Bad Words").Find(new BsonDocument()).ToList();
             List<FilterViewModel> es = mongoDB.database.GetCollection<FilterViewModel>("Spanish Bad Words").Find(new BsonDocument()).ToList();

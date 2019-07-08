@@ -1,30 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private MongoDBContext mongoDB;
-        public UsersController()
-        {
-            mongoDB = new MongoDBContext();
-
-        }
+        public UsersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
 
         [HttpGet]
-        public async Task<List<UserViewModel>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<UserViewModel>("Users").Find(new BsonDocument()).ToListAsync();
+                var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted);
+
+               // var result = users.Select(u => UserResult.Create(u));
+
+                return new OkObjectResult(users);
+
+                //return await mongoDB.database.GetCollection<UserViewModel>("Users").Find(new BsonDocument()).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -33,14 +41,16 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<UserViewModel> GetById(string id)
+        public async Task<Users> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
-                var filter = Builders<UserViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
-                return result[0];
+                var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted&&u.Id== ObjectId.Parse(id));
+
+                //var collection = mongoDB.database.GetCollection<Users>("Users");
+                //var filter = Builders<Users>.Filter.Eq("_id", ObjectId.Parse(id));
+                //var result = await collection.Find(filter).ToListAsync();
+                return users[0];
             }
             catch (Exception ex)
             {
@@ -49,38 +59,38 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] UserViewModel user)
+        public async Task<bool> Post([FromBody] Users user)
         {
-            var document = new BsonDocument
-            {
+         
+            await UnitOfWork.Repository<Users>().InsertAsync(user);
 
-                { "FullName", user.FullName},
-                { "PhoneNumber", user.PhoneNumber},
-                { "Email", user.Email},
-                { "Bio", user.Bio},
-                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
-            };
-            await mongoDB.database.GetCollection<BsonDocument>("Users").InsertOneAsync(document);
+            return true;
         }
 
 
-        [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] UserViewModel user)
+        [HttpPut("{_id}")]
+        async public Task<bool> Put(string _id, [FromBody] Users user)
         {
 
-            var document = new BsonDocument
-            {
-                { "FullName", user.FullName},
-                { "PhoneNumber", user.PhoneNumber},
-                { "Email", user.Email},
-                { "Bio", user.Bio},
-                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
-            };
+
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Users");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                var document = new BsonDocument
+
+                {
+
+                { "FullName", user.FullName},
+
+                { "PhoneNumber", user.PhoneNumber},
+
+                { "Email", user.Email},
+
+                { "Bio", user.Bio},
+
+                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
+
+                  };
+                UnitOfWork.Repository<Users>().Update(document, ObjectId.Parse(_id),"users");
                 return true;
             }
             catch (Exception ex)
@@ -91,13 +101,28 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Users user)
         {
+
+
             try
             {
-                var collection = mongoDB.database.GetCollection<UserViewModel>("Users");
-                var filter = Builders<UserViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+
+                {
+
+                { "FullName", user.FullName},
+
+                { "PhoneNumber", user.PhoneNumber},
+
+                { "Email", user.Email},
+
+                { "Bio", user.Bio},
+
+                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
+
+                  };
+                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "user", true);
                 return true;
             }
             catch (Exception ex)

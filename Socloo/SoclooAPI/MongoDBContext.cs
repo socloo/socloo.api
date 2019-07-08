@@ -24,7 +24,7 @@ namespace SoclooAPI
                     database.CreateCollection("Answer");
 
                 }
-                if (!!list.Contains("AnswersMCs"))
+                if (!list.Contains("AnswersMCs"))
                 {
                     database.CreateCollection("AnswerMCs");
                 }
@@ -110,14 +110,7 @@ namespace SoclooAPI
                 }
                 if (!list.Contains("Users"))
                 {
-                    //  MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer());
                     database.CreateCollection("Users");
-
-                    // IMongoCollection<User> collection = database.GetCollection<User>("User");
-                    //    collection.Indexes.CreateMany(new User);
-
-
-                    //   collection.DocumentSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(typeof(User), new UserSerializer()));
 
 
                 }
