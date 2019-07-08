@@ -3,13 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SoclooAPI.Models
 {
-    public class AnswerTFViewModel
+    public class Answer
     {
         public ObjectId Id { get; set; }
-
         [BsonRepresentation(BsonType.ObjectId)]
+        public string SubclassId { get; set; }
+        public int SubclassType { get; set; } 
 
-        public string QuestionId { get; set; }
-        public bool Correct { get; set; }
+        
     }
 }

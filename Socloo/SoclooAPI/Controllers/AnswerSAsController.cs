@@ -20,11 +20,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AnswerSAViewModel>> Get()
+        public async Task<List<AnswerSA>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<AnswerSAViewModel>("AnswerSAs").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<AnswerSA>("AnswerSAs").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -35,12 +35,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<AnswerSAViewModel> GetById(string id)
+        public async Task<AnswerSA> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerSAViewModel>("AnswerSAs");
-                var filter = Builders<AnswerSAViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<AnswerSA>("AnswerSAs");
+                var filter = Builders<AnswerSA>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -51,7 +51,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] AnswerSAViewModel answerSA)
+        async public void Post([FromBody] AnswerSA answerSA)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -64,7 +64,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] AnswerSAViewModel answerSA)
+        async public Task<bool> Put(string id, [FromBody] AnswerSA answerSA)
         {
 
             var document = new BsonDocument
@@ -90,8 +90,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerSAViewModel>("AnswerSAs");
-                var filter = Builders<AnswerSAViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<AnswerSA>("AnswerSAs");
+                var filter = Builders<AnswerSA>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

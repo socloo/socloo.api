@@ -1,16 +1,15 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic;
-
 
 namespace SoclooAPI.Models
 {
-    public class DashboardViewModel
+    public class AnswerTF
     {
-        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> PostsId { get; set; }
+
+        public string QuestionId { get; set; }
+        public bool Correct { get; set; }
     }
 }

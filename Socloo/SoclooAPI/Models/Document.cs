@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SoclooAPI.Models
 {
-    public class DocumentViewModel
+    public class Document
     {
         public ObjectId Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]

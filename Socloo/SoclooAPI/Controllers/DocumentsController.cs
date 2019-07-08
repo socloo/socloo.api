@@ -18,11 +18,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<DocumentViewModel>> Get()
+        public async Task<List<Document>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<DocumentViewModel>("Documents").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Document>("Documents").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -32,12 +32,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<DocumentViewModel> GetById(string id)
+        public async Task<Document> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<DocumentViewModel>("Documents");
-                var filter = Builders<DocumentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Document>("Documents");
+                var filter = Builders<Document>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -48,7 +48,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] DocumentViewModel doc)
+        async public void Post([FromBody] Document doc)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -68,7 +68,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] DocumentViewModel doc)
+        async public Task<bool> Put(string id, [FromBody] Document doc)
         {
 
             try
@@ -96,8 +96,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<DocumentViewModel>("Documents");
-                var filter = Builders<DocumentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Document>("Documents");
+                var filter = Builders<Document>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

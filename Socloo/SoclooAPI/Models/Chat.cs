@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 namespace SoclooAPI.Models
 {
-    public class ChatViewModel
+    public class Chat
     {
 
         public ObjectId Id { get; set; }

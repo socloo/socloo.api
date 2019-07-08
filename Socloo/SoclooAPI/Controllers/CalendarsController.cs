@@ -17,11 +17,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<CalendarViewModel>> Get()
+        public async Task<List<Calendar>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<CalendarViewModel>("Calendars").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Calendar>("Calendars").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -31,12 +31,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<CalendarViewModel> GetById(string id)
+        public async Task<Calendar> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<CalendarViewModel>("Calendars");
-                var filter = Builders<CalendarViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Calendar>("Calendars");
+                var filter = Builders<Calendar>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -47,7 +47,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] CalendarViewModel calendar)
+        async public void Post([FromBody] Calendar calendar)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -65,7 +65,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] CalendarViewModel calendar)
+        async public Task<bool> Put(string id, [FromBody] Calendar calendar)
         {
 
             try
@@ -91,8 +91,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<CalendarViewModel>("Calendars");
-                var filter = Builders<CalendarViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Calendar>("Calendars");
+                var filter = Builders<Calendar>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

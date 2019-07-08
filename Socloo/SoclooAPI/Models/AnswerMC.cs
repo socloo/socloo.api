@@ -1,15 +1,15 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic;
 namespace SoclooAPI.Models
 {
-    public class CalendarViewModel
+    public class AnswerMC
     {
         public ObjectId Id { get; set; }
-
+        public string Text { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public string UserId { get; set; }
+        public string QuestionId { get; set; }
+        public bool Correct { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> OccurrencesId { get; set; }
+        public string Image { get; set; }
     }
 }

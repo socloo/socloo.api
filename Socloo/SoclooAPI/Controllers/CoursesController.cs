@@ -20,11 +20,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<CourseViewModel>> Get()
+        public async Task<List<Course>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<CourseViewModel>("Courses").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Course>("Courses").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -35,12 +35,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<CourseViewModel> GetById(string id)
+        public async Task<Course> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<CourseViewModel>("Courses");
-                var filter = Builders<CourseViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Course>("Courses");
+                var filter = Builders<Course>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -51,7 +51,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] CourseViewModel course)
+        async public void Post([FromBody] Course course)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -68,7 +68,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] CourseViewModel course)
+        async public Task<bool> Put(string id, [FromBody] Course course)
         {
 
             var document = new BsonDocument
@@ -98,8 +98,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<CourseViewModel>("Courses");
-                var filter = Builders<CourseViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Course>("Courses");
+                var filter = Builders<Course>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

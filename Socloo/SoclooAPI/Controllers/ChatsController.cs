@@ -19,11 +19,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<ChatViewModel>> Get()
+        public async Task<List<Chat>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<ChatViewModel>("Chats").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Chat>("Chats").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -33,12 +33,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<ChatViewModel> GetById(string id)
+        public async Task<Chat> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<ChatViewModel>("Chats");
-                var filter = Builders<ChatViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Chat>("Chats");
+                var filter = Builders<Chat>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -49,7 +49,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] ChatViewModel chat)
+        async public void Post([FromBody] Chat chat)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -69,7 +69,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] ChatViewModel chat)
+        async public Task<bool> Put(string id, [FromBody] Chat chat)
         {
 
             try
@@ -97,8 +97,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<ChatViewModel>("Chats");
-                var filter = Builders<ChatViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Chat>("Chats");
+                var filter = Builders<Chat>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

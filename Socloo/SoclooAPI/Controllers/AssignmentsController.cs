@@ -17,11 +17,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<AssignmentViewModel>> Get()
+        public async Task<List<Assignment>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<AssignmentViewModel>("Assignments").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Assignment>("Assignments").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -31,12 +31,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<AssignmentViewModel> GetById(string id)
+        public async Task<Assignment> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AssignmentViewModel>("Assignments");
-                var filter = Builders<AssignmentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Assignment>("Assignments");
+                var filter = Builders<Assignment>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -47,7 +47,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] AssignmentViewModel assignment)
+        async public void Post([FromBody] Assignment assignment)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -67,7 +67,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] AssignmentViewModel assignment)
+        async public Task<bool> Put(string id, [FromBody] Assignment assignment)
         {
 
             try
@@ -97,8 +97,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AssignmentViewModel>("Assignments");
-                var filter = Builders<AssignmentViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Assignment>("Assignments");
+                var filter = Builders<Assignment>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

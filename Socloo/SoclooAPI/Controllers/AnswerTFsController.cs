@@ -20,11 +20,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AnswerTFViewModel>> Get()
+        public async Task<List<AnswerTF>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<AnswerTFViewModel>("AnswerTFs").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<AnswerTF>("AnswerTFs").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -35,12 +35,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<AnswerTFViewModel> GetById(string id)
+        public async Task<AnswerTF> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerTFViewModel>("AnswerTFs");
-                var filter = Builders<AnswerTFViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<AnswerTF>("AnswerTFs");
+                var filter = Builders<AnswerTF>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -50,7 +50,7 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpPost]
-        async public void Post([FromBody] AnswerTFViewModel answerTF)
+        async public void Post([FromBody] AnswerTF answerTF)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -62,7 +62,7 @@ namespace SoclooAPI.Controllers
             await mongoDB.database.GetCollection<BsonDocument>("AnswerTFs").InsertOneAsync(document);
         }
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody]  AnswerTFViewModel answerTF)
+        async public Task<bool> Put(string id, [FromBody]  AnswerTF answerTF)
         {
 
             var document = new BsonDocument
@@ -88,8 +88,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerTFViewModel>("AnswerTFs");
-                var filter = Builders<AnswerTFViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<AnswerTF>("AnswerTFs");
+                var filter = Builders<AnswerTF>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

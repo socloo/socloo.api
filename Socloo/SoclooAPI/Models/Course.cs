@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SoclooAPI.Models
 {
-    public class CourseViewModel
+    public class Course
     {
         public ObjectId Id { get; set; }
 

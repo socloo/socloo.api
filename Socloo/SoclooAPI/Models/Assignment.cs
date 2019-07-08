@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace SoclooAPI.Models
 {
-    public class AssignmentViewModel
+    public class Assignment
     {
 
         public ObjectId Id { get; set; }
