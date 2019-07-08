@@ -59,8 +59,8 @@ namespace SoclooAPI.Controllers
 
                 };
                 var fs = new GridFSBucket(mongoDB.database);
-                var collection = mongoDB.database.GetCollection<FileViewModel>("fs.files");
-                var filter = Builders<FileViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Models.File>("fs.files");
+                var filter = Builders<Models.File>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = collection.Find(filter).ToList();
                 var fileDate = result[0];
                 var f = fs.DownloadAsBytes(ObjectId.Parse(id));
@@ -78,8 +78,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<FileViewModel>("fs.files");
-                var filter = Builders<FileViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Models.File>("fs.files");
+                var filter = Builders<Models.File>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

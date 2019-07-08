@@ -20,11 +20,11 @@ namespace SoclooAPI.Controllers
 
         }
         [HttpGet]
-        public async Task<List<GroupViewModel>> Get()
+        public async Task<List<Group>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<GroupViewModel>("Groups").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Group>("Groups").Find(new BsonDocument()).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -33,12 +33,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<GroupViewModel> GetById(string id)
+        public async Task<Group> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<GroupViewModel>("Groups");
-                var filter = Builders<GroupViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Group>("Groups");
+                var filter = Builders<Group>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -49,7 +49,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody]  GroupViewModel group)
+        async public void Post([FromBody]  Group group)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -67,7 +67,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] GroupViewModel group)
+        async public Task<bool> Put(string id, [FromBody] Group group)
         {
 
             var document = new BsonDocument
@@ -95,8 +95,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<GroupViewModel>("Groups");
-                var filter = Builders<GroupViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Group>("Groups");
+                var filter = Builders<Group>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

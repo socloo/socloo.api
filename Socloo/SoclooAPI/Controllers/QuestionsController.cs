@@ -19,11 +19,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<QuestionViewModel>> Get()
+        public async Task<List<Question>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<QuestionViewModel>("Questions").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Question>("Questions").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -33,12 +33,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<QuestionViewModel> GetById(string id)
+        public async Task<Question> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<QuestionViewModel>("Questions");
-                var filter = Builders<QuestionViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Question>("Questions");
+                var filter = Builders<Question>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -48,7 +48,7 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpPost]
-        async public void Post([FromBody] QuestionViewModel question)
+        async public void Post([FromBody] Question question)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -59,7 +59,7 @@ namespace SoclooAPI.Controllers
             await mongoDB.database.GetCollection<BsonDocument>("Questions").InsertOneAsync(document);
         }
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] QuestionViewModel question)
+        async public Task<bool> Put(string id, [FromBody] Question question)
         {
 
             var document = new BsonDocument
@@ -84,8 +84,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<QuestionViewModel>("Questions");
-                var filter = Builders<QuestionViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Question>("Questions");
+                var filter = Builders<Question>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

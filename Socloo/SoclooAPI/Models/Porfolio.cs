@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SoclooAPI.Models
 {
-    public class PorfolioViewModel
+    public class Porfolio
     {
         public ObjectId id { get; set; }
 

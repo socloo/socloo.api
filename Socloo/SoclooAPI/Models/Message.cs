@@ -4,15 +4,16 @@ using System;
 
 namespace SoclooAPI.Models
 {
-    public class OccurrenceViewModel
+    public class Message
     {
         public ObjectId Id { get; set; }
-
-        public int Type { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public string TeacherId { get; set; }
+        public string UserId { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime Date { get; set; }
-        public string Info { get; set; }
+        public DateTime DataTime { get; set; }
+
+        public string MessageText { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ChatId { get; set; }
     }
 }

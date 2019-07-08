@@ -4,7 +4,7 @@ using System;
 
 namespace SoclooAPI.Models
 {
-    public class FileViewModel
+    public class File
     {
         public ObjectId id { get; set; }
         public int length { get; set; }

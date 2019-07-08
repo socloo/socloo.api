@@ -4,16 +4,16 @@ using System;
 
 namespace SoclooAPI.Models
 {
-    public class MessageViewModel
+    public class Post
     {
+
         public ObjectId Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public int Type { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime DataTime { get; set; }
-
-        public string MessageText { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ChatId { get; set; }
+        public DateTime PostDate { get; set; }
     }
 }
