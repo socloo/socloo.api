@@ -18,11 +18,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<PostViewModel>> Get()
+        public async Task<List<Post>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<PostViewModel>("Posts").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Post>("Posts").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -32,12 +32,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<PostViewModel> GetById(string id)
+        public async Task<Post> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<PostViewModel>("Posts");
-                var filter = Builders<PostViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Post>("Posts");
+                var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -48,7 +48,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] PostViewModel post)
+        async public void Post([FromBody] Post post)
         {
 
             var document = new BsonDocument
@@ -67,7 +67,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] PostViewModel post)
+        async public Task<bool> Put(string id, [FromBody] Post post)
         {
             
             try
@@ -96,8 +96,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<PostViewModel>("Posts");
-                var filter = Builders<PostViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Post>("Posts");
+                var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

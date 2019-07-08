@@ -4,18 +4,22 @@ using System.Collections.Generic;
 
 namespace SoclooAPI.Models
 {
-    public class SchoolAdminViewModel
+    public class Test
     {
         public ObjectId Id { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public string UserId { get; set; }
+
+        public List<ObjectId> TeachersId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> TeachersId { get; set; }
+
+        public List<ObjectId> StudentsId { get; set; }
+        public double TimeMax { get; set; }
+        public string PictureId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> CoursesId { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> GroupsId { get; set; }
+
+        public List<ObjectId> QuestionsId { get; set; }
+
         public int Type { get; set; }
     }
 }

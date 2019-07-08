@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 namespace SoclooAPI.Models
 {
-    public class StudentViewModel
+    public class Student
     {
 
         public ObjectId id { get; set; }

@@ -18,11 +18,11 @@ namespace SoclooAPI.Models
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<MessageViewModel>> Get()
+        public async Task<List<Message>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<MessageViewModel>("Messages").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<Message>("Messages").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -32,12 +32,12 @@ namespace SoclooAPI.Models
             }
         }
         [HttpGet("{id}")]
-        public async Task<MessageViewModel> GetById(string id)
+        public async Task<Message> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<MessageViewModel>("Messages");
-                var filter = Builders<MessageViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Message>("Messages");
+                var filter = Builders<Message>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -48,7 +48,7 @@ namespace SoclooAPI.Models
         }
 
         [HttpPost]
-        async public void Post([FromBody] MessageViewModel message)
+        async public void Post([FromBody] Message message)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -68,7 +68,7 @@ namespace SoclooAPI.Models
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] MessageViewModel message)
+        async public Task<bool> Put(string id, [FromBody] Message message)
         {
 
             try
@@ -96,8 +96,8 @@ namespace SoclooAPI.Models
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<MessageViewModel>("Messages");
-                var filter = Builders<MessageViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<Message>("Messages");
+                var filter = Builders<Message>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }

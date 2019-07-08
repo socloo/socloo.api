@@ -18,11 +18,11 @@ namespace SoclooAPI.Controllers
             mongoDB = new MongoDBContext();
         }
         [HttpGet]
-        public async Task<List<SuperAdminViewModel>> Get()
+        public async Task<List<SuperAdmin>> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<SuperAdminViewModel>("SuperAdmins").Find(new BsonDocument()).ToListAsync();
+                return await mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins").Find(new BsonDocument()).ToListAsync();
 
 
             }
@@ -32,12 +32,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<SuperAdminViewModel> GetById(string id)
+        public async Task<SuperAdmin> GetById(string id)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<SuperAdminViewModel>("SuperAdmins");
-                var filter = Builders<SuperAdminViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins");
+                var filter = Builders<SuperAdmin>.Filter.Eq("_id", ObjectId.Parse(id));
                 var result = await collection.Find(filter).ToListAsync();
                 return result[0];
             }
@@ -48,7 +48,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] SuperAdminViewModel admin)
+        async public void Post([FromBody] SuperAdmin admin)
         {
             List<ObjectId> list = new List<ObjectId>();
             var bsonarray = new BsonArray(list);
@@ -67,7 +67,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] SuperAdminViewModel admin)
+        async public Task<bool> Put(string id, [FromBody] SuperAdmin admin)
         {
 
             try
@@ -95,8 +95,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<SuperAdminViewModel>("SuperAdmins");
-                var filter = Builders<SuperAdminViewModel>.Filter.Eq("_id", ObjectId.Parse(id));
+                var collection = mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins");
+                var filter = Builders<SuperAdmin>.Filter.Eq("_id", ObjectId.Parse(id));
                 await collection.DeleteOneAsync(filter);
                 return true;
             }
