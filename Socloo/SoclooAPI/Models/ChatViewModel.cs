@@ -8,9 +8,8 @@ namespace SoclooAPI.Models
 
         public ObjectId Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> StudentsId { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> TeachersId { get; set; }
+        public List<string> UsersId { get; set; }
+        
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> MessagesId { get; set; }
         public string ChatName { get; set; }
