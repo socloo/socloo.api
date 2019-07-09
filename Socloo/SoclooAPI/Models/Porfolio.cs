@@ -1,11 +1,13 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using SoclooAPI.Data;
 
 namespace SoclooAPI.Models
 {
-    public class Porfolio
+    public class Porfolio : IEntity<ObjectId>
     {
-        public ObjectId id { get; set; }
+        [BsonElement("_id")]
+        public ObjectId Id { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
@@ -16,5 +18,6 @@ namespace SoclooAPI.Models
         public string References { get; set; }
         public string GeneralInfo { get; set; }
         public string Certification { get; set; }
+        public bool Deleted { get; set; } = false;
     }
 }
