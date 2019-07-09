@@ -166,16 +166,16 @@ namespace SoclooAPI.Data
 
             return (OccurrenceRepository<T>)_geoRepository[typeof(T)];
         }
-        public PorfolioRepository<T> PorfolioRepository<T>() where T : ILocalizableEntity<ObjectId>
+        public PortfolioRepository<T> PorfolioRepository<T>() where T : ILocalizableEntity<ObjectId>
         {
             if (!_geoRepository.Keys.Contains(typeof(T)))
             {
-                var obj = new PorfolioRepository<T>(_context);
+                var obj = new PortfolioRepository<T>(_context);
 
                 _geoRepository.Add(typeof(T), obj);
             }
 
-            return (PorfolioRepository<T>)_geoRepository[typeof(T)];
+            return (PortfolioRepository<T>)_geoRepository[typeof(T)];
         }
         public  PostRepository<T> PostRepository<T>() where T : ILocalizableEntity<ObjectId>
         {

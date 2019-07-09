@@ -1,32 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CoursesController : ControllerBase
+    public class CoursesController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public CoursesController()
-        {
-            mongoDB = new MongoDBContext();
 
-        }
+        public CoursesController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
 
         [HttpGet]
-        public async Task<List<Course>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Course>("Courses").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Course>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -39,9 +40,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Course>("Courses");
-                var filter = Builders<Course>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Course>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -51,27 +50,22 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] Course course)
+        public async Task<bool> Post([FromBody] Course course)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "StudentsId", bsonarray},
-                 { "TeachersId", bsonarray},
-                 { "CoordinatorsId",bsonarray},
-                 { "Grade", course.Grade},
-                 { "Section", course.Section},
-                 { "SubjectBranch", course.SubjectBranch}
-            };
-            await mongoDB.database.GetCollection<BsonDocument>("Courses").InsertOneAsync(document);
+
+            await UnitOfWork.Repository<Course>().InsertAsync(course);
+
+            return true;
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Course course)
+        async public Task<bool> Put(string _id, [FromBody] Course course)
         {
 
-            var document = new BsonDocument
+            
+            try
+            {
+                var document = new BsonDocument
             {
                  { "StudentsId", new BsonArray(course.StudentsId)},
                  { "TeachersId", new BsonArray(course.TeachersId)},
@@ -80,11 +74,7 @@ namespace SoclooAPI.Controllers
                  { "Section", course.Section},
                  { "SubjectBranch", course.SubjectBranch}
             };
-            try
-            {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Courses");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Chat>().Update(document, ObjectId.Parse(_id), "courses");
                 return true;
             }
             catch (Exception ex)
@@ -94,13 +84,20 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Course course)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Course>("Courses");
-                var filter = Builders<Course>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                 { "StudentsId", new BsonArray(course.StudentsId)},
+                 { "TeachersId", new BsonArray(course.TeachersId)},
+                 { "CoordinatorsId",new BsonArray(course.CoordinatorsId)},
+                 { "Grade", course.Grade},
+                 { "Section", course.Section},
+                 { "SubjectBranch", course.SubjectBranch}
+            };
+                UnitOfWork.Repository<Course>().Delete(document, ObjectId.Parse(id), "courses", true);
                 return true;
             }
             catch (Exception ex)

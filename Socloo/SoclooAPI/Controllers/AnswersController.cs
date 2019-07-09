@@ -1,32 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnswersController : ControllerBase
+    public class AnswersController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public AnswersController()
-        {
-            mongoDB = new MongoDBContext();
-
-        }
+        public AnswersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
 
         [HttpGet]
-        public async Task<List<Answer>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Answer>("Answers").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Answer>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -40,9 +42,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Answer>("Answers");
-                var filter = Builders<Answer>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Answer>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -50,32 +50,28 @@ namespace SoclooAPI.Controllers
                 return null;
             }
         }
-
         [HttpPost]
-        async public void Post([FromBody] Answer answer)
+        public async Task<bool> Post([FromBody] Answer answer)
         {
-            var document = new BsonDocument
-                {
-                     { "SubclassId", answer.SubclassId},
-                     { "SubclassType", answer.SubclassType}
-                };
-            await mongoDB.database.GetCollection<BsonDocument>("Answers").InsertOneAsync(document);
+
+            await UnitOfWork.Repository<Answer>().InsertAsync(answer);
+
+            return true;
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Answer answer)
+        async public Task<bool> Put(string _id, [FromBody] Answer answer)
         {
 
-            var document = new BsonDocument
+            
+            try
+            {
+                var document = new BsonDocument
             {
                 { "SubclassId", ObjectId.Parse(answer.SubclassId)},
                 { "SubclassType", answer.SubclassType}
             };
-            try
-            {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Answers");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Answer>().Update(document, ObjectId.Parse(_id), "answers");
                 return true;
             }
             catch (Exception ex)
@@ -84,13 +80,16 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Answer answer)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Answer>("Answers");
-                var filter = Builders<Answer>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+                {
+                     { "SubclassId", ObjectId.Parse(answer.SubclassId)},
+                 { "SubclassType", answer.SubclassType}
+                };
+                UnitOfWork.Repository<Answer>().Delete(document, ObjectId.Parse(id), "answers", true);
                 return true;
             }
             catch (Exception ex)

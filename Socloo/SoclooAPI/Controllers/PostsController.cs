@@ -1,30 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public PostsController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+        public PostsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Post>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Post>("Posts").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Post>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -36,9 +38,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Post>("Posts");
-                var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Post>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -48,26 +48,17 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] Post post)
+        public async Task<bool> Post([FromBody] Post post)
         {
 
-            var document = new BsonDocument
-            {
-                 { "UserId", ObjectId.Parse(post.UserId)},
-                 { "Title", post.Title},
-                 { "Content",post.Content},
-                { "Type", post.Type},
-                { "PostDate", Convert.ToDateTime(post.PostDate) },
-            };
+            await UnitOfWork.Repository<Post>().InsertAsync(post);
 
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Posts");
-            await collection.InsertOneAsync(document);
-
+            return true;
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Post post)
+        async public Task<bool> Put(string _id, [FromBody] Post post)
         {
             
             try
@@ -81,9 +72,7 @@ namespace SoclooAPI.Controllers
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
             };
 
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Posts");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(_id), "posts");
                 return true;
             }
             catch (Exception ex)
@@ -92,13 +81,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Post post)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Post>("Posts");
-                var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {  { "UserId", ObjectId.Parse(post.UserId)},
+                 { "Title", post.Title},
+                 { "Content",post.Content},
+                { "Type", post.Type},
+                { "PostDate", Convert.ToDateTime(post.PostDate)},
+            };
+                UnitOfWork.Repository<Post>().Delete(document, ObjectId.Parse(id), "posts", true);
                 return true;
             }
             catch (Exception ex)

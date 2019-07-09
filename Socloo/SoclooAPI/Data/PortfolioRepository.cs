@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SoclooAPI.Data
 {
-    public class PorfolioRepository<T> : Repository<T> where T : ILocalizableEntity<ObjectId>
+    public class PortfolioRepository<T> : Repository<T> where T : ILocalizableEntity<ObjectId>
 
     { 
-        public PorfolioRepository(DataContext context) : base(context)
+        public PortfolioRepository(DataContext context) : base(context)
         {
         }
     }

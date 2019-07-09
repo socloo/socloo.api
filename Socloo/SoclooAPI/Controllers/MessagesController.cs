@@ -1,30 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
+using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace SoclooAPI.Models
+namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MessagesController : ControllerBase
+    public class MessagesController : BaseController
     {
-
-        private MongoDBContext mongoDB;
-        public MessagesController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+        public MessagesController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Message>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Message>("Messages").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Message>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -36,9 +38,7 @@ namespace SoclooAPI.Models
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Message>("Messages");
-                var filter = Builders<Message>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Message>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -48,27 +48,17 @@ namespace SoclooAPI.Models
         }
 
         [HttpPost]
-        async public void Post([FromBody] Message message)
+        public async Task<bool> Post([FromBody] Message message)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            message.MessageText = new Filter().RemoveBadWord(message.MessageText);
-            var document = new BsonDocument
-            {
-                 { "UserId", ObjectId.Parse(message.UserId)},
-                 { "DataTime", Convert.ToDateTime(message.DataTime)},
-                 { "MessageText",message.MessageText},
-                { "ChatId",  ObjectId.Parse(message.ChatId)},
-            };
 
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Messages");
-            await collection.InsertOneAsync(document);
+            await UnitOfWork.Repository<Message>().InsertAsync(message);
 
+            return true;
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Message message)
+        async public Task<bool> Put(string _id, [FromBody] Message message)
         {
 
             try
@@ -81,9 +71,7 @@ namespace SoclooAPI.Models
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
             };
 
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Messages");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Group>().Update(document, ObjectId.Parse(_id), "groups");
                 return true;
             }
             catch (Exception ex)
@@ -92,13 +80,18 @@ namespace SoclooAPI.Models
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Message message)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Message>("Messages");
-                var filter = Builders<Message>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                  { "UserId", ObjectId.Parse(message.UserId)},
+                 { "DataTime", Convert.ToDateTime(message.DataTime)},
+                 { "MessageText",message.MessageText},
+                { "ChatId",  ObjectId.Parse(message.ChatId)},
+            };
+                UnitOfWork.Repository<Message>().Delete(document, ObjectId.Parse(id), "messages", true);
                 return true;
             }
             catch (Exception ex)

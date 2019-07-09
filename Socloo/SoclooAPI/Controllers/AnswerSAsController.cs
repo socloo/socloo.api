@@ -1,32 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnswerSAsController : ControllerBase
+    public class AnswerSAsController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public AnswerSAsController()
-        {
-            mongoDB = new MongoDBContext();
-
-        }
+        public AnswerSAsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
 
         [HttpGet]
-        public async Task<List<AnswerSA>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<AnswerSA>("AnswerSAs").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<AnswerSA>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -39,9 +41,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerSA>("AnswerSAs");
-                var filter = Builders<AnswerSA>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<AnswerSA>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -51,32 +51,25 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] AnswerSA answerSA)
+        public async Task<bool> Post([FromBody] AnswerSA answerSA)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "Text", answerSA.Text},
-                 { "QuestionId",ObjectId.Parse(answerSA.QuestionId)}
-            };
-            await mongoDB.database.GetCollection<BsonDocument>("AnswerSAs").InsertOneAsync(document);
+
+            await UnitOfWork.Repository<AnswerSA>().InsertAsync(answerSA);
+
+            return true;
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] AnswerSA answerSA)
+        async public Task<bool> Put(string _id, [FromBody] AnswerSA answerSA)
         {
-
-            var document = new BsonDocument
-            {
-                { "Text", answerSA.Text},
-                { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
-            };
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("AnswerSAs");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                var document = new BsonDocument
+                {
+                    { "Text", answerSA.Text},
+                    { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
+                };
+                UnitOfWork.Repository<AnswerSA>().Update(document, ObjectId.Parse(_id), "answerSAs");
                 return true;
             }
             catch (Exception ex)
@@ -86,13 +79,16 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] AnswerSA answerSA)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<AnswerSA>("AnswerSAs");
-                var filter = Builders<AnswerSA>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+                {
+                     { "Text", answerSA.Text},
+                       { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
+                };
+                UnitOfWork.Repository<AnswerSA>().Delete(document, ObjectId.Parse(id), "answerSAs", true);
                 return true;
             }
             catch (Exception ex)

@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CalendarsController : ControllerBase
+    public class CalendarsController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public CalendarsController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+
+        public CalendarsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Calendar>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Calendar>("Calendars").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Calendar>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -35,9 +38,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Calendar>("Calendars");
-                var filter = Builders<Calendar>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Calendar>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -47,25 +48,17 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] Calendar calendar)
+        public async Task<bool> Post([FromBody] Calendar calendar)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "UserId", ObjectId.Parse(calendar.UserId)},
-                 { "OccurrencesId", bsonarray},
 
-            };
+            await UnitOfWork.Repository<Calendar>().InsertAsync(calendar);
 
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Calendars");
-            await collection.InsertOneAsync(document);
-
+            return true;
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Calendar calendar)
+        async public Task<bool> Put(string _id, [FromBody] Calendar calendar)
         {
 
             try
@@ -76,9 +69,7 @@ namespace SoclooAPI.Controllers
                  { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
             };
 
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Calendars");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Calendar>().Update(document, ObjectId.Parse(_id), "calendars");
                 return true;
             }
             catch (Exception ex)
@@ -87,13 +78,16 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Calendar calendar)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Calendar>("Calendars");
-                var filter = Builders<Calendar>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                   { "UserId", ObjectId.Parse(calendar.UserId)},
+                 { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
+            };
+                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "assignments", true);
                 return true;
             }
             catch (Exception ex)

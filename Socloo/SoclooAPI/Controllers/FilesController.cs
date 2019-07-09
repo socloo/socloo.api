@@ -7,6 +7,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using SoclooAPI.Data;
+using System.Collections.Generic;
 
 namespace SoclooAPI.Controllers
 {

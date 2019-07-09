@@ -1,29 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AssignmentsController : ControllerBase
+    public class AssignmentsController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public AssignmentsController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+        public AssignmentsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Assignment>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Assignment>("Assignments").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Assignment>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -35,9 +37,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Assignment>("Assignments");
-                var filter = Builders<Assignment>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Assignment>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -45,29 +45,18 @@ namespace SoclooAPI.Controllers
                 return null;
             }
         }
-
         [HttpPost]
-        async public void Post([FromBody] Assignment assignment)
+        public async Task<bool> Post([FromBody] Assignment assignment)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "TeachersId",bsonarray},
-                 { "StudentsId", bsonarray},
-                 { "ExpirationDate",Convert.ToDateTime(assignment.ExpirationDate)},
-                { "Info", assignment.Info},
-                { "FileId", ObjectId.Parse(assignment.FileId)},
-            };
 
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Assignments");
-            await collection.InsertOneAsync(document);
+            await UnitOfWork.Repository<Assignment>().InsertAsync(assignment);
 
+            return true;
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Assignment assignment)
+        async public Task<bool> Put(string _id, [FromBody] Assignment assignment)
         {
 
             try
@@ -82,9 +71,7 @@ namespace SoclooAPI.Controllers
                 { "FileId", ObjectId.Parse(assignment.FileId)}
             };
 
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Assignments");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Assignment>().Update(document, ObjectId.Parse(_id), "assignments");
                 return true;
             }
             catch (Exception ex)
@@ -93,13 +80,19 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Assignment assignment)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Assignment>("Assignments");
-                var filter = Builders<Assignment>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                 { "TeachersId", new BsonArray(assignment.TeachersId)},
+                 { "StudentsId", new BsonArray(assignment.StudentsId)},
+                { "ExpirationDate",Convert.ToDateTime(assignment.ExpirationDate)},
+                { "Info", assignment.Info},
+                { "FileId", ObjectId.Parse(assignment.FileId)}
+            };
+                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "assignments", true);
                 return true;
             }
             catch (Exception ex)

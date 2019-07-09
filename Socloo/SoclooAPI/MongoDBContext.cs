@@ -72,7 +72,7 @@ namespace SoclooAPI
                 {
                     database.CreateCollection("Occurrences");
                 }
-                if (!list.Contains("Porfolios"))
+                if (!list.Contains("Portfolios"))
                 {
                     database.CreateCollection("Porfolios");
                 }

@@ -1,30 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DashboardsController : ControllerBase
+    public class DashboardsController : BaseController
     {
 
-        private MongoDBContext mongoDB;
-        public DashboardsController()
-        {
-            mongoDB = new MongoDBContext();
-
-        }
+        public DashboardsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Dashboard>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Dashboard>("Dashboards").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Dashboard>().GetListAsync(u => !u.Deleted);
+
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -37,9 +40,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Dashboard>("Dashboards");
-                var filter = Builders<Dashboard>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Dashboard>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -49,32 +50,27 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody]  Dashboard dash)
+        public async Task<bool> Post([FromBody] Dashboard dashboard)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                { "PostsId",bsonarray},
 
-            };
-            await mongoDB.database.GetCollection<BsonDocument>("Dashboards").InsertOneAsync(document);
+            await UnitOfWork.Repository<Dashboard>().InsertAsync(dashboard);
+
+            return true;
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Dashboard dash)
+        async public Task<bool> Put(string _id, [FromBody] Dashboard dash)
         {
 
-            var document = new BsonDocument
+            
+            try
+            {
+                var document = new BsonDocument
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
             };
-            try
-            {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Dashboards");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Chat>().Update(document, ObjectId.Parse(_id), "dashboards");
                 return true;
             }
             catch (Exception ex)
@@ -83,13 +79,15 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Dashboard dash)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Dashboard>("Dashboards");
-                var filter = Builders<Dashboard>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                 { "PostsId", new BsonArray(dash.PostsId)},
+            };
+                UnitOfWork.Repository<Dashboard>().Delete(document, ObjectId.Parse(id), "dashboards", true);
                 return true;
             }
             catch (Exception ex)
@@ -98,5 +96,6 @@ namespace SoclooAPI.Controllers
             }
 
         }
+
     }
 }
