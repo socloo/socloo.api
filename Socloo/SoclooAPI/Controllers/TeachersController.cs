@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -9,23 +12,20 @@ namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeachersController : ControllerBase
+    public class TeachersController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public TeachersController()
-        {
-            mongoDB = new MongoDBContext();
+        public TeachersController(IConfiguration config, ILogger<TeachersController> logger, DataContext context) :
+                base(config, logger, context)
+        { }
 
-        }
-
-        [HttpGet]
-        public async Task<List<Teacher>> Get()
+    [HttpGet]
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Teacher>("Teachers").Find(new BsonDocument()).ToListAsync();
+                var teachers = await UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(teachers);
             }
             catch (Exception ex)
             {
@@ -38,10 +38,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Teacher>("Teachers");
-                var filter = Builders<Teacher>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
-                return result[0];
+                var teacher = await UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
+                return teacher[0];
             }
             catch (Exception ex)
             {
@@ -50,18 +48,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] Teacher teacher)
+         public bool Post([FromBody] Teacher teacher)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "UserId", teacher.UserId},
-                 { "CoursesId", bsonarray},
-                 { "GroupsId",bsonarray},
-                { "Subject", bsonarray},
-            };
-            await mongoDB.database.GetCollection<BsonDocument>("Teachers").InsertOneAsync(document);
+            UnitOfWork.Repository<Teacher>().InsertAsync(teacher);
+
+            return true;
         }
 
         [HttpPut("{id}")]
@@ -77,9 +68,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Teachers");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Teacher>().Update(document, ObjectId.Parse(id), "teachers");
                 return true;
             }
             catch (Exception ex)
@@ -90,13 +79,18 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Teacher teacher)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Teacher>("Teachers");
-                var filter = Builders<Teacher>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                { "UserId", teacher.UserId},
+                { "CoursesId", new BsonArray(teacher.CoursesId)},
+                { "GroupsId", new BsonArray(teacher.GroupsId)},
+                { "Subject", new BsonArray(teacher.Subject)}
+            };
+                UnitOfWork.Repository<Teacher>().Delete(document, ObjectId.Parse(id), "teacher", true);
                 return true;
             }
             catch (Exception ex)
