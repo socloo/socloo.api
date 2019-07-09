@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SuperAdminsController : ControllerBase
+    public class SuperAdminsController : BaseController
     {
-        private MongoDBContext mongoDB;
-        public SuperAdminsController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+        public SuperAdminsController(IConfiguration config, ILogger<SuperAdminsController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
+
         [HttpGet]
-        public async Task<List<SuperAdmin>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins").Find(new BsonDocument()).ToListAsync();
+                var superAdmins = await UnitOfWork.Repository<SuperAdmin>().GetListAsync(u => !u.Deleted);
 
+                return new OkObjectResult(superAdmins);
 
             }
             catch (Exception ex)
@@ -36,10 +39,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins");
-                var filter = Builders<SuperAdmin>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
-                return result[0];
+                var superAdmins = await UnitOfWork.Repository<SuperAdmin>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
+                return superAdmins[0];
             }
             catch (Exception ex)
             {
@@ -50,19 +51,7 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         async public void Post([FromBody] SuperAdmin admin)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                 { "UserId", ObjectId.Parse(admin.UserId)},
-                 { "TeachersId", bsonarray},
-                 { "CoursesId",bsonarray},
-                { "GroupsId", bsonarray},
-            };
-
-            var collection = mongoDB.database.GetCollection<BsonDocument>("SuperAdmins");
-            await collection.InsertOneAsync(document);
-
+            await UnitOfWork.Repository<SuperAdmin>().InsertAsync(admin);
         }
 
 
@@ -79,10 +68,7 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(admin.CoursesId)},
                 { "GroupsId",new BsonArray(admin.GroupsId)},
             };
-
-                var collection = mongoDB.database.GetCollection<BsonDocument>("SuperAdmins");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<SuperAdmin>().Update(document, ObjectId.Parse(id), "superadmins");
                 return true;
             }
             catch (Exception ex)
@@ -91,13 +77,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] SuperAdmin admin)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<SuperAdmin>("SuperAdmins");
-                var filter = Builders<SuperAdmin>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                 { "UserId", ObjectId.Parse(admin.UserId)},
+                 { "TeachersId", new BsonArray(admin.TeachersId)},
+                 { "CoursesId",new BsonArray(admin.CoursesId)},
+                { "GroupsId",new BsonArray(admin.GroupsId)},
+            };
+                UnitOfWork.Repository<SuperAdmin>().Delete(document, ObjectId.Parse(id), "superadmins", true);
                 return true;
             }
             catch (Exception ex)
