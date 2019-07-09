@@ -16,7 +16,6 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        private MongoDBContext mongoDB;
         public UsersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
             base(config, logger, context)
         { }
@@ -28,11 +27,7 @@ namespace SoclooAPI.Controllers
             {
                 var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted);
 
-               // var result = users.Select(u => UserResult.Create(u));
-
                 return new OkObjectResult(users);
-
-                //return await mongoDB.database.GetCollection<UserViewModel>("Users").Find(new BsonDocument()).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -46,10 +41,6 @@ namespace SoclooAPI.Controllers
             try
             {
                 var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted&&u.Id== ObjectId.Parse(id));
-
-                //var collection = mongoDB.database.GetCollection<Users>("Users");
-                //var filter = Builders<Users>.Filter.Eq("_id", ObjectId.Parse(id));
-                //var result = await collection.Find(filter).ToListAsync();
                 return users[0];
             }
             catch (Exception ex)
