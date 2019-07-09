@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class PostsController : BaseController
     {
-        public PostsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public PostsController(IConfiguration config, ILogger<PostsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
@@ -72,7 +72,7 @@ namespace SoclooAPI.Controllers
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
             };
 
-                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(_id), "posts");
+                UnitOfWork.Repository<Post>().Update(document, ObjectId.Parse(_id), "posts");
                 return true;
             }
             catch (Exception ex)

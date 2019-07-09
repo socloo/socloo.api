@@ -17,7 +17,7 @@ namespace SoclooAPI.Controllers
     public class GroupsController : BaseController
     {
 
-        public GroupsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public GroupsController(IConfiguration config, ILogger<GroupsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

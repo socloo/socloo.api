@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class SchoolAdminsController : BaseController
     {
-        public SchoolAdminsController(IConfiguration config, ILogger<QuestionsController> logger, DataContext context) :
+        public SchoolAdminsController(IConfiguration config, ILogger<SchoolAdminsController> logger, DataContext context) :
             base(config, logger, context)
         { }
 
@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(_id), "questions");
+                UnitOfWork.Repository<SchoolAdmin>().Update(document, ObjectId.Parse(_id), "schooladmins");
                 return true;
             }
             catch (Exception ex)

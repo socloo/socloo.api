@@ -11,6 +11,7 @@ namespace SoclooAPI.Data
 
         T UserId { get; set; }
 
+
         string[] Tags { get; set; }
     }
 }

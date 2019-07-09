@@ -17,7 +17,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerSAsController : BaseController
     {
-        public AnswerSAsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public AnswerSAsController(IConfiguration config, ILogger<AnswerSAsController> logger, DataContext context) :
             base(config, logger, context)
         { }
 

@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerMCsController : BaseController
     {
-        public AnswerMCsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public AnswerMCsController(IConfiguration config, ILogger<AnswerMCsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
                      { "Correct", answerMC.Correct},
                      { "Image", ObjectId.Parse(answerMC.Image)}
                 };
-                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answerMCs");
+                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answermc");
                 return true;
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace SoclooAPI.Controllers
                      { "Correct", answerMC.Correct},
                      { "Image", ObjectId.Parse(answerMC.Image)}
                 };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "user", true);
+                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermc", true);
                 return true;
             }
             catch (Exception ex)

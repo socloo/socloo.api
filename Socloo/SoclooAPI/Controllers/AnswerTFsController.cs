@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerTFsController : BaseController
     {
-        public AnswerTFsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public AnswerTFsController(IConfiguration config, ILogger<AnswerTFsController> logger, DataContext context) :
             base(config, logger, context)
         { }
 

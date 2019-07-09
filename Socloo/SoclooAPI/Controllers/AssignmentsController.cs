@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AssignmentsController : BaseController
     {
-        public AssignmentsController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public AssignmentsController(IConfiguration config, ILogger<AssignmentsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

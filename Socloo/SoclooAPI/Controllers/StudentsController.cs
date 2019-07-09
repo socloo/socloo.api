@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class StudentsController : BaseController
     {
         private MongoDBContext mongoDB;
-        public StudentsController()
-        {
-            mongoDB = new MongoDBContext();
-        }
+        public StudentsController(IConfiguration config, ILogger<StudentsController> logger, DataContext context) :
+            base(config, logger, context)
+        { }
         [HttpGet]
-        public async Task<List<Student>> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await mongoDB.database.GetCollection<Student>("Students").Find(new BsonDocument()).ToListAsync();
+                var result = await UnitOfWork.Repository<Student>().GetListAsync(u => !u.Deleted);
 
-
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -35,9 +38,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Student>("Users");
-                var filter = Builders<Student>.Filter.Eq("_id", ObjectId.Parse(id));
-                var result = await collection.Find(filter).ToListAsync();
+                var result = await UnitOfWork.Repository<Student>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return result[0];
             }
             catch (Exception ex)
@@ -47,26 +48,16 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        async public void Post([FromBody] Student student)
+        public async Task<bool> Post([FromBody] Student student)
         {
-            List<ObjectId> list = new List<ObjectId>();
-            var bsonarray = new BsonArray(list);
-            var document = new BsonDocument
-            {
-                { "UserId", ObjectId.Parse(student.UserId)},
-                { "TeachersId", bsonarray},
-                { "CoursesId",bsonarray},
-                { "GroupsId", bsonarray},
-              { "PortfolioId", ObjectId.Empty},
-            };
 
-            var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
-            await collection.InsertOneAsync(document);
+            await UnitOfWork.Repository<Student>().InsertAsync(student);
 
+            return true;
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Student student)
+        async public Task<bool> Put(string _id, [FromBody] Student student)
         {
 
             var document = new BsonDocument
@@ -79,9 +70,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                var collection = mongoDB.database.GetCollection<BsonDocument>("Students");
-                var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.FindOneAndReplaceAsync(filter, document);
+                UnitOfWork.Repository<Student>().Update(document, ObjectId.Parse(_id), "students");
                 return true;
             }
             catch (Exception ex)
@@ -92,13 +81,19 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteById(string id, [FromBody] Student student)
         {
             try
             {
-                var collection = mongoDB.database.GetCollection<Student>("Students");
-                var filter = Builders<Student>.Filter.Eq("_id", ObjectId.Parse(id));
-                await collection.DeleteOneAsync(filter);
+                var document = new BsonDocument
+            {
+                 { "UserId", ObjectId.Parse(student.UserId)},
+                 { "TeachersId", new BsonArray(student.TeachersId)},
+                 { "CoursesId",new BsonArray(student.CoursesId)},
+                { "GroupsId", new BsonArray(student.GroupsId)},
+                { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
+            };
+                UnitOfWork.Repository<Student>().Delete(document, ObjectId.Parse(id), "students", true);
                 return true;
             }
             catch (Exception ex)

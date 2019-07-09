@@ -19,9 +19,9 @@ namespace SoclooAPI
             {
                 List<string> list = database.ListCollectionNames().ToList<string>();
 
-                if (!list.Contains("Answer"))
+                if (!list.Contains("Answers"))
                 {
-                    database.CreateCollection("Answer");
+                    database.CreateCollection("Answers");
 
                 }
                 if (!list.Contains("AnswersMCs"))
