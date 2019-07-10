@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] AnswerMC answerMC)
         {
             try
@@ -80,8 +80,10 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] AnswerMC answerMC)
+        public async Task<bool> DeleteById(string id)
         {
+            AnswerMC answerMC = this.GetById(id).Result;
+
             try
             {
                 var document = new BsonDocument
@@ -89,7 +91,8 @@ namespace SoclooAPI.Controllers
                      { "Text", answerMC.Text},
                      { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                      { "Correct", answerMC.Correct},
-                     { "Image", ObjectId.Parse(answerMC.Image)}
+                     { "Image", ObjectId.Parse(answerMC.Image)},
+                    { "Deleted", true}
                 };
                 UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermc", true);
                 return true;
