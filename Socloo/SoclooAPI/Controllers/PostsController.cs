@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string _id, [FromBody] Post post)
+        async public Task<bool> Put(string id, [FromBody] Post post)
         {
             
             try
@@ -72,7 +72,7 @@ namespace SoclooAPI.Controllers
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
             };
 
-                UnitOfWork.Repository<Post>().Update(document, ObjectId.Parse(_id), "posts");
+                UnitOfWork.Repository<Post>().Update(document, ObjectId.Parse(id), "posts");
                 return true;
             }
             catch (Exception ex)
@@ -81,16 +81,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Post post)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Post post = this.GetById(id).Result;
                 var document = new BsonDocument
             {  { "UserId", ObjectId.Parse(post.UserId)},
                  { "Title", post.Title},
                  { "Content",post.Content},
                 { "Type", post.Type},
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
+                {"Deleted",true }
             };
                 UnitOfWork.Repository<Post>().Delete(document, ObjectId.Parse(id), "posts", true);
                 return true;

@@ -77,16 +77,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] SuperAdmin admin)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                SuperAdmin admin = this.GetById(id).Result;
                 var document = new BsonDocument
             {
                  { "UserId", ObjectId.Parse(admin.UserId)},
                  { "TeachersId", new BsonArray(admin.TeachersId)},
                  { "CoursesId",new BsonArray(admin.CoursesId)},
                 { "GroupsId",new BsonArray(admin.GroupsId)},
+                {"Deleted",true }
             };
                 UnitOfWork.Repository<SuperAdmin>().Delete(document, ObjectId.Parse(id), "superadmins", true);
                 return true;

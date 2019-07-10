@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string _id, [FromBody] Occurrence occurrence)
+        async public Task<bool> Put(string id, [FromBody] Occurrence occurrence)
         {
 
             try
@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "Info", ""+occurrence.Info},
             };
 
-                UnitOfWork.Repository<Occurrence>().Update(document, ObjectId.Parse(_id), "occurrences");
+                UnitOfWork.Repository<Occurrence>().Update(document, ObjectId.Parse(id), "occurrences");
                 return true;
             }
             catch (Exception ex)
@@ -80,16 +80,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Occurrence occurrence)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Occurrence occurrence = this.GetById(id).Result;
                 var document = new BsonDocument
             {
                  {"Type",occurrence.Type },
                  { "TeacherId", ObjectId.Parse(occurrence.TeacherId)},
                  { "Date",Convert.ToDateTime(occurrence.Date)},
                 { "Info", ""+occurrence.Info},
+                  {"Deleted",true }
             };
                 UnitOfWork.Repository<Occurrence>().Delete(document, ObjectId.Parse(id), "occurrences", true);
                 return true;

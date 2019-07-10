@@ -79,10 +79,11 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Teacher teacher)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Teacher teacher = this.GetById(id).Result;
                 var document = new BsonDocument
             {
                 { "UserId", teacher.UserId},
