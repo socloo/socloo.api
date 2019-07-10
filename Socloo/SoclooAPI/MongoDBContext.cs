@@ -15,102 +15,102 @@ namespace SoclooAPI
 
             database = client.GetDatabase("SoclooDevDb");
 
-          /*  try
+            try
             {
                 List<string> list = database.ListCollectionNames().ToList<string>();
 
-                if (!list.Contains("Answers"))
+                if (!list.Contains("answers"))
                 {
-                    database.CreateCollection("Answers");
+                    database.CreateCollection("answers");
 
                 }
-                if (!list.Contains("AnswersMCs"))
+                if (!list.Contains("answersMCs"))
                 {
-                    database.CreateCollection("AnswerMCs");
+                    database.CreateCollection("answerMCs");
                 }
-                if (!list.Contains("AnswerSAs"))
+                if (!list.Contains("answerSAs"))
                 {
-                    database.CreateCollection("AnswerSAs");
+                    database.CreateCollection("answerSAs");
                 }
-                if (!list.Contains("AnswerTFs"))
+                if (!list.Contains("answerTFs"))
                 {
-                    database.CreateCollection("AnswerTFs");
+                    database.CreateCollection("answerTFs");
                 }
-                if (!list.Contains("Assignments"))
+                if (!list.Contains("assignments"))
                 {
-                    database.CreateCollection("Assignments");
+                    database.CreateCollection("assignments");
                 }
-                if (!list.Contains("Calendars"))
+                if (!list.Contains("calendars"))
                 {
-                    database.CreateCollection("Calendars");
+                    database.CreateCollection("calendars");
                 }
-                if (!list.Contains("Chats"))
+                if (!list.Contains("chats"))
                 {
-                    database.CreateCollection("Chats");
+                    database.CreateCollection("chats");
                 }
-                if (!list.Contains("Courses"))
+                if (!list.Contains("courses"))
                 {
-                    database.CreateCollection("Courses");
+                    database.CreateCollection("courses");
                 }
-                if (!list.Contains("Dashboards"))
+                if (!list.Contains("dashboards"))
                 {
-                    database.CreateCollection("Dashboards");
+                    database.CreateCollection("dashboards");
                 }
-                if (!list.Contains("Documents"))
+                if (!list.Contains("documents"))
                 {
-                    database.CreateCollection("Documents");
+                    database.CreateCollection("documents");
                 }
-                if (!list.Contains("Groups"))
+                if (!list.Contains("groups"))
                 {
-                    database.CreateCollection("Groups");
+                    database.CreateCollection("groups");
                 }
-                if (!list.Contains("Messages"))
+                if (!list.Contains("messages"))
                 {
-                    database.CreateCollection("Messages");
+                    database.CreateCollection("messages");
                 }
-                if (!list.Contains("Occurrences"))
+                if (!list.Contains("occurrences"))
                 {
-                    database.CreateCollection("Occurrences");
+                    database.CreateCollection("occurrences");
                 }
-                if (!list.Contains("Portfolios"))
+                if (!list.Contains("portfolios"))
                 {
-                    database.CreateCollection("Porfolios");
+                    database.CreateCollection("porfolios");
                 }
-                if (!list.Contains("Posts"))
+                if (!list.Contains("posts"))
                 {
-                    database.CreateCollection("Posts");
+                    database.CreateCollection("posts");
                 }
-                if (!list.Contains("Questions"))
+                if (!list.Contains("questions"))
                 {
-                    database.CreateCollection("Questions");
+                    database.CreateCollection("questions");
                 }
-                if (!list.Contains("Schools"))
+                if (!list.Contains("schools"))
                 {
-                    database.CreateCollection("Schools");
+                    database.CreateCollection("schools");
                 }
-                if (!list.Contains("SchoolAdmins"))
+                if (!list.Contains("schoolAdmins"))
                 {
-                    database.CreateCollection("SchoolAdmins");
+                    database.CreateCollection("schoolAdmins");
                 }
-                if (!list.Contains("Students"))
+                if (!list.Contains("students"))
                 {
-                    database.CreateCollection("Students");
+                    database.CreateCollection("students");
                 }
-                if (!list.Contains("SuperAdmins"))
+                if (!list.Contains("superAdmins"))
                 {
-                    database.CreateCollection("SuperAdmins");
+                    database.CreateCollection("superAdmins");
                 }
-                if (!list.Contains("Teachers"))
+                if (!list.Contains("teachers"))
                 {
-                    database.CreateCollection("Teachers");
+                    database.CreateCollection("teachers");
                 }
-                if (!list.Contains("Tests"))
+                if (!list.Contains("tests"))
                 {
-                    database.CreateCollection("Tests");
+                    database.CreateCollection("tests");
                 }
-                if (!list.Contains("Users"))
+                if (!list.Contains("users"))
                 {
-                    database.CreateCollection("Users");
+                    database.CreateCollection("users");
 
 
                 }
@@ -122,7 +122,7 @@ namespace SoclooAPI
 
             }
 
-    */
+    
 
 
 
