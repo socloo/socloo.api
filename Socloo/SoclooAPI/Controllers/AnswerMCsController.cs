@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
                      { "Correct", answerMC.Correct},
                      { "Image", ObjectId.Parse(answerMC.Image)}
                 };
-                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answermc");
+                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answermcs");
                 return true;
             }
             catch (Exception ex)
@@ -80,8 +80,10 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] AnswerMC answerMC)
+        public async Task<bool> DeleteById(string id)
         {
+            AnswerMC answerMC = this.GetById(id).Result;
+
             try
             {
                 var document = new BsonDocument
@@ -89,9 +91,10 @@ namespace SoclooAPI.Controllers
                      { "Text", answerMC.Text},
                      { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                      { "Correct", answerMC.Correct},
-                     { "Image", ObjectId.Parse(answerMC.Image)}
+                     { "Image", ObjectId.Parse(answerMC.Image)},
+                    { "Deleted", true}
                 };
-                UnitOfWork.Repository<User>().Delete(document, ObjectId.Parse(id), "answermc", true);
+                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermcs", true);
                 return true;
             }
             catch (Exception ex)

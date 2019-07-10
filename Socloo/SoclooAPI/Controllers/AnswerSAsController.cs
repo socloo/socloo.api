@@ -59,7 +59,7 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] AnswerSA answerSA)
         {
             try
@@ -69,7 +69,7 @@ namespace SoclooAPI.Controllers
                     { "Text", answerSA.Text},
                     { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
                 };
-                UnitOfWork.Repository<AnswerSA>().Update(document, ObjectId.Parse(_id), "answerSAs");
+                UnitOfWork.Repository<AnswerSA>().Update(document, ObjectId.Parse(_id), "answersas");
                 return true;
             }
             catch (Exception ex)
@@ -79,16 +79,19 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] AnswerSA answerSA)
+        public async Task<bool> DeleteById(string id)
         {
+            AnswerSA answerSA = this.GetById(id).Result;
+
             try
             {
                 var document = new BsonDocument
                 {
                      { "Text", answerSA.Text},
-                       { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
+                       { "QuestionId", ObjectId.Parse(answerSA.QuestionId)},
+                    { "Deleted", true}
                 };
-                UnitOfWork.Repository<AnswerSA>().Delete(document, ObjectId.Parse(id), "answerSAs", true);
+                UnitOfWork.Repository<AnswerSA>().Delete(document, ObjectId.Parse(id), "answersas", true);
                 return true;
             }
             catch (Exception ex)
