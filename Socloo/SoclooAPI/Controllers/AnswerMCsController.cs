@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
                      { "Correct", answerMC.Correct},
                      { "Image", ObjectId.Parse(answerMC.Image)}
                 };
-                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answermc");
+                UnitOfWork.Repository<AnswerMC>().Update(document, ObjectId.Parse(_id), "answermcs");
                 return true;
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace SoclooAPI.Controllers
                      { "Image", ObjectId.Parse(answerMC.Image)},
                     { "Deleted", true}
                 };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermc", true);
+                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermcs", true);
                 return true;
             }
             catch (Exception ex)
