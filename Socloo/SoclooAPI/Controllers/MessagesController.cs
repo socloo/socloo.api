@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string _id, [FromBody] Message message)
+        async public Task<bool> Put(string id, [FromBody] Message message)
         {
 
             try
@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
             };
 
-                UnitOfWork.Repository<Group>().Update(document, ObjectId.Parse(_id), "groups");
+                UnitOfWork.Repository<Group>().Update(document, ObjectId.Parse(id), "messages");
                 return true;
             }
             catch (Exception ex)
@@ -80,16 +80,18 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Message message)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Message message = this.GetById(id).Result;
                 var document = new BsonDocument
             {
                   { "UserId", ObjectId.Parse(message.UserId)},
                  { "DataTime", Convert.ToDateTime(message.DataTime)},
                  { "MessageText",message.MessageText},
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
+                 {"Deleted",true }
             };
                 UnitOfWork.Repository<Message>().Delete(document, ObjectId.Parse(id), "messages", true);
                 return true;

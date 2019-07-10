@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string _id, [FromBody] Portfolio portfolio)
+        async public Task<bool> Put(string id, [FromBody] Portfolio portfolio)
         {
             
             try
@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "GeneralInfo", ""+portfolio.GeneralInfo},
                 { "Certification",""+portfolio.Certification}
             };
-                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(_id), "portfolios");
+                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(id), "portfolios");
                 return true;
             }
             catch (Exception ex)
@@ -82,10 +82,11 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Portfolio portfolio)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Portfolio portfolio= this.GetById(id).Result;
                 var document = new BsonDocument
             {  { "UserId",ObjectId.Parse(portfolio.UserId)},
                 { "Education", ""+portfolio.Education},
@@ -94,7 +95,8 @@ namespace SoclooAPI.Controllers
                 { "Interests", ""+portfolio.Interests},
                 { "References", ""+portfolio.References},
                 { "GeneralInfo", ""+portfolio.GeneralInfo},
-                { "Certification",""+portfolio.Certification}
+                { "Certification",""+portfolio.Certification},
+                {"Deleted",true }
             };
                 UnitOfWork.Repository<Portfolio>().Delete(document, ObjectId.Parse(id), "portfolios", true);
                 return true;

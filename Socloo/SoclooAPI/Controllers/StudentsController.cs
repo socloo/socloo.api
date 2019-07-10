@@ -57,7 +57,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string _id, [FromBody] Student student)
+        async public Task<bool> Put(string id, [FromBody] Student student)
         {
 
             var document = new BsonDocument
@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                UnitOfWork.Repository<Student>().Update(document, ObjectId.Parse(_id), "students");
+                UnitOfWork.Repository<Student>().Update(document, ObjectId.Parse(id), "students");
                 return true;
             }
             catch (Exception ex)
@@ -81,10 +81,11 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Student student)
+        public async Task<bool> DeleteById(string id)
         {
             try
             {
+                Student student = this.GetById(id).Result;
                 var document = new BsonDocument
             {
                  { "UserId", ObjectId.Parse(student.UserId)},
@@ -92,6 +93,7 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(student.CoursesId)},
                 { "GroupsId", new BsonArray(student.GroupsId)},
                 { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
+                  {"Deleted",true }
             };
                 UnitOfWork.Repository<Student>().Delete(document, ObjectId.Parse(id), "students", true);
                 return true;
