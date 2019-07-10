@@ -92,9 +92,9 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Users user)
+        public async Task<bool> DeleteById(string id)
         {
-
+            Users user = this.GetById(id).Result;
 
             try
             {
@@ -110,10 +110,11 @@ namespace SoclooAPI.Controllers
 
                 { "Bio", user.Bio},
 
-                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
+                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)},
+                    {"Deleted",true }
 
                   };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "user", true);
+                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "users", true);
                 return true;
             }
             catch (Exception ex)

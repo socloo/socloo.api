@@ -83,12 +83,15 @@ namespace SoclooAPI.Data
 
                 var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 
- 
+                
 
                
 
                 if (logical)
                 {
+                    
+
+                   
                     await collection.FindOneAndReplaceAsync(filter, document);
                 }
                 else
