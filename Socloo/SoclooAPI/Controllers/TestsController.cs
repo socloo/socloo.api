@@ -86,7 +86,9 @@ namespace SoclooAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<bool> DeleteById(string id)
         {
-            Test test = this.GetById(id).Result;
+            try
+            {
+                Test test = this.GetById(id).Result;
             var document = new BsonDocument
             {
                  { "TeachersId", new BsonArray(test.TeachersId)},
@@ -98,8 +100,7 @@ namespace SoclooAPI.Controllers
                     {"Deleted",true }
 
             };
-            try
-            {
+            
                 UnitOfWork.Repository<Test>().Delete(document, ObjectId.Parse(id), "tests", true);
                 return true;
             }

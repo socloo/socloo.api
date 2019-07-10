@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] AnswerMC answerMC)
         {
             try
@@ -91,7 +91,7 @@ namespace SoclooAPI.Controllers
                      { "Correct", answerMC.Correct},
                      { "Image", ObjectId.Parse(answerMC.Image)}
                 };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermc", true);
+                UnitOfWork.Repository<User>().Delete(document, ObjectId.Parse(id), "answermc", true);
                 return true;
             }
             catch (Exception ex)

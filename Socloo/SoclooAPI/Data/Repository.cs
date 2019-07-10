@@ -32,7 +32,7 @@ namespace SoclooAPI.Data
         {
             Context = context;
 
-            CollectionName = typeof(T).Name.ToLower();
+            CollectionName = typeof(T).Name.ToLower()+"s";
 
             Collection = Context.Database.GetCollection<T>(CollectionName);
         }

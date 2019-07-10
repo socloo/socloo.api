@@ -24,17 +24,17 @@ namespace SoclooAPI
                     database.CreateCollection("answers");
 
                 }
-                if (!list.Contains("answersMCs"))
+                if (!list.Contains("answersmcs"))
                 {
-                    database.CreateCollection("answerMCs");
+                    database.CreateCollection("answermcs");
                 }
-                if (!list.Contains("answerSAs"))
+                if (!list.Contains("answersas"))
                 {
-                    database.CreateCollection("answerSAs");
+                    database.CreateCollection("answersas");
                 }
-                if (!list.Contains("answerTFs"))
+                if (!list.Contains("answertfs"))
                 {
-                    database.CreateCollection("answerTFs");
+                    database.CreateCollection("answertfs");
                 }
                 if (!list.Contains("assignments"))
                 {
@@ -88,17 +88,17 @@ namespace SoclooAPI
                 {
                     database.CreateCollection("schools");
                 }
-                if (!list.Contains("schoolAdmins"))
+                if (!list.Contains("schooladmins"))
                 {
-                    database.CreateCollection("schoolAdmins");
+                    database.CreateCollection("schooladmins");
                 }
                 if (!list.Contains("students"))
                 {
                     database.CreateCollection("students");
                 }
-                if (!list.Contains("superAdmins"))
+                if (!list.Contains("superadmins"))
                 {
-                    database.CreateCollection("superAdmins");
+                    database.CreateCollection("superadmins");
                 }
                 if (!list.Contains("teachers"))
                 {

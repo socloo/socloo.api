@@ -12,15 +12,16 @@ namespace SoclooAPI.Models
 
         [BsonRepresentation(BsonType.ObjectId)]
 
-        public List<ObjectId> TeachersId { get; set; }
+        public List<string> TeachersId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
 
-        public List<ObjectId> StudentsId { get; set; }
+        public List<string> StudentsId { get; set; }
         public double TimeMax { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
         public string PictureId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
 
-        public List<ObjectId> QuestionsId { get; set; }
+        public List<string> QuestionsId { get; set; }
 
         public int Type { get; set; }
         public bool Deleted { get; set; } = false;

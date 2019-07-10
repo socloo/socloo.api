@@ -4,7 +4,7 @@ using SoclooAPI.Data;
 
 namespace SoclooAPI.Models
 {
-    public class Users : IEntity<ObjectId>
+    public class User : IEntity<ObjectId>
     {
         [BsonElement("_id")]
         public ObjectId Id { get; set; }

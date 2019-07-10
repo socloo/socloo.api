@@ -25,7 +25,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted);
+                var users = await UnitOfWork.Repository<User>().GetListAsync(u => !u.Deleted);
 
                 return new OkObjectResult(users);
             }
@@ -36,11 +36,11 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Users> GetById(string id)
+        public async Task<User> GetById(string id)
         {
             try
             {
-                var users = await UnitOfWork.Repository<Users>().GetListAsync(u => !u.Deleted&&u.Id== ObjectId.Parse(id));
+                var users = await UnitOfWork.Repository<User>().GetListAsync(u => !u.Deleted&&u.Id== ObjectId.Parse(id));
                 return users[0];
             }
             catch (Exception ex)
@@ -50,17 +50,17 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Users user)
+        public async Task<bool> Post([FromBody] User user)
         {
          
-            await UnitOfWork.Repository<Users>().InsertAsync(user);
+            await UnitOfWork.Repository<User>().InsertAsync(user);
 
             return true;
         }
 
 
         [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Users user)
+        async public Task<bool> Put(string _id, [FromBody] User user)
         {
 
 
@@ -81,7 +81,7 @@ namespace SoclooAPI.Controllers
                 { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
 
                   };
-                UnitOfWork.Repository<Users>().Update(document, ObjectId.Parse(_id),"users");
+                UnitOfWork.Repository<User>().Update(document, ObjectId.Parse(_id),"users");
                 return true;
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace SoclooAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<bool> DeleteById(string id)
         {
-            Users user = this.GetById(id).Result;
+            User user = this.GetById(id).Result;
 
             try
             {
@@ -114,7 +114,7 @@ namespace SoclooAPI.Controllers
                     {"Deleted",true }
 
                   };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "users", true);
+                UnitOfWork.Repository<User>().Delete(document, ObjectId.Parse(id), "users", true);
                 return true;
             }
             catch (Exception ex)
