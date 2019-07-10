@@ -15,7 +15,7 @@ namespace SoclooAPI
 
             database = client.GetDatabase("SoclooDevDb");
 
-            try
+          /*  try
             {
                 List<string> list = database.ListCollectionNames().ToList<string>();
 
@@ -122,7 +122,7 @@ namespace SoclooAPI
 
             }
 
-
+    */
 
 
 
