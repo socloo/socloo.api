@@ -67,7 +67,7 @@ namespace SoclooAPI.Controllers
                  {"FileId",ObjectId.Parse(doc.FileId)  },
                  { "UsersId", new BsonArray(doc.UsersId)},
                  { "TeacherId", ObjectId.Parse(doc.TeacherId)},
-                { "DateTime",Convert.ToDateTime(doc.DateTime)},
+                { "DateTime",doc.DateTime},
             };
 
                 UnitOfWork.Repository<Document>().Update(document, ObjectId.Parse(_id), "documents");
@@ -89,7 +89,7 @@ namespace SoclooAPI.Controllers
                  {"FileId",ObjectId.Parse(doc.FileId)  },
                  { "UsersId", new BsonArray(doc.UsersId)},
                  { "TeacherId", ObjectId.Parse(doc.TeacherId)},
-                { "DateTime",Convert.ToDateTime(doc.DateTime)},
+                { "DateTime",doc.DateTime},
                 { "Deleted", true}
             };
                 UnitOfWork.Repository<Document>().Delete(document, ObjectId.Parse(id), "documents", true);
