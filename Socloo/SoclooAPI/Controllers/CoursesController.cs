@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] Course course)
         {
 
@@ -84,8 +84,9 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Course course)
+        public async Task<bool> DeleteById(string id)
         {
+            Course course = this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
@@ -95,7 +96,8 @@ namespace SoclooAPI.Controllers
                  { "CoordinatorsId",new BsonArray(course.CoordinatorsId)},
                  { "Grade", course.Grade},
                  { "Section", course.Section},
-                 { "SubjectBranch", course.SubjectBranch}
+                 { "SubjectBranch", course.SubjectBranch},
+                 { "Deleted", true}
             };
                 UnitOfWork.Repository<Course>().Delete(document, ObjectId.Parse(id), "courses", true);
                 return true;

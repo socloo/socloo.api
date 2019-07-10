@@ -57,7 +57,7 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] Chat chat)
         {
 
@@ -80,8 +80,9 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Chat chat)
+        public async Task<bool> DeleteById(string id)
         {
+            Chat chat = this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
@@ -90,6 +91,7 @@ namespace SoclooAPI.Controllers
                  { "MessagesId",new BsonArray(chat.MessagesId)},
                  {"ChatName",chat.ChatName },
                 { "ChatType", chat.ChatType},
+                 { "Deleted", true}
             };
                 UnitOfWork.Repository<Chat>().Delete(document, ObjectId.Parse(id), "chats", true);
                 return true;

@@ -57,7 +57,7 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] Calendar calendar)
         {
 
@@ -78,16 +78,19 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Calendar calendar)
+        public async Task<bool> DeleteById(string id)
         {
+            Calendar calendar = this.GetById(id).Result;
+
             try
             {
                 var document = new BsonDocument
             {
                    { "UserId", ObjectId.Parse(calendar.UserId)},
                  { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
+                 { "Deleted", true}
             };
-                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "assignments", true);
+                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "calendars", true);
                 return true;
             }
             catch (Exception ex)

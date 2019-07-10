@@ -94,7 +94,7 @@ namespace SoclooAPI.Controllers
                      { "Image", ObjectId.Parse(answerMC.Image)},
                     { "Deleted", true}
                 };
-                UnitOfWork.Repository<Users>().Delete(document, ObjectId.Parse(id), "answermcs", true);
+                UnitOfWork.Repository<AnswerMC>().Delete(document, ObjectId.Parse(id), "answermcs", true);
                 return true;
             }
             catch (Exception ex)

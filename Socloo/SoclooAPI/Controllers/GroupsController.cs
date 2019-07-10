@@ -58,7 +58,7 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] Group group)
         {
 
@@ -82,8 +82,9 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Group group)
+        public async Task<bool> DeleteById(string id)
         {
+            Group group = this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
@@ -93,6 +94,7 @@ namespace SoclooAPI.Controllers
                 { "Name", "" + group.Name},
                 { "Info", "" + group.Info},
                 { "PictureId", ObjectId.Parse(group.PictureId)},
+                { "Deleted", true}
             };
                 UnitOfWork.Repository<Group>().Delete(document, ObjectId.Parse(id), "groups", true);
                 return true;

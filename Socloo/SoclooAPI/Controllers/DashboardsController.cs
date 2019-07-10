@@ -59,7 +59,7 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{_id}")]
         async public Task<bool> Put(string _id, [FromBody] Dashboard dash)
         {
 
@@ -79,13 +79,15 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id, [FromBody] Dashboard dash)
+        public async Task<bool> DeleteById(string id)
         {
+            Dashboard dash = this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
+                 { "Deleted", true}
             };
                 UnitOfWork.Repository<Dashboard>().Delete(document, ObjectId.Parse(id), "dashboards", true);
                 return true;
