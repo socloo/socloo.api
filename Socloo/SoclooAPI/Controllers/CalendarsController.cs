@@ -19,6 +19,9 @@ namespace SoclooAPI.Controllers
         public CalendarsController(IConfiguration config, ILogger<CalendarsController> logger, DataContext context) :
             base(config, logger, context)
         { }
+
+       
+    
         [HttpGet]
         public async Task<IActionResult> Get()
         {

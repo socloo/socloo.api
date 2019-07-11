@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SoclooAPI.Controllers
 {
@@ -17,6 +19,8 @@ namespace SoclooAPI.Controllers
             base(config, logger, context)
         {
         }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -52,10 +56,19 @@ namespace SoclooAPI.Controllers
         public async Task<IActionResult> Post([FromBody] User user)
         {
             try{
+                Calendar calendar = new Calendar {Deleted = false, OccurrencesId = new List<string>() };
 
-                 await UnitOfWork.Repository<User>().InsertAsync(user);
-
-                 return new OkObjectResult(user.Id);
+               var calendarId= UnitOfWork.Repository<Calendar>().InsertAsync(calendar).Result.Id;
+                user.CalendarId = Convert.ToString(calendarId);
+                await UnitOfWork.Repository<User>().InsertAsync(user);
+                var document = new BsonDocument
+                   {
+                   { "UserId", user.Id},
+                   { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
+                    {"Deleted", false}
+                  };
+                UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(user.CalendarId), "calendars");
+                return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
                 return new BadRequestResult();
@@ -81,7 +94,8 @@ namespace SoclooAPI.Controllers
 
                     {"Bio", user.Bio},
 
-                    {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
+                    {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)},
+                   
                 };
                 UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
                  return new OkObjectResult(user.Id);

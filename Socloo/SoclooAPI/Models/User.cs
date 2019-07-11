@@ -15,5 +15,8 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string ProfilePictureId { get; set; }
         public bool Deleted { get; set; } = false;
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string CalendarId { get; set; }
     }
 }
