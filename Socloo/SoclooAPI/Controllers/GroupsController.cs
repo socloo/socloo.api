@@ -58,8 +58,8 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Group group)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Group group)
         {
 
            
@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "Info", "" + group.Info},
                 { "PictureId", ObjectId.Parse(group.PictureId)},
             };
-                UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(_id), "groups");
+                UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "groups");
                 return true;
             }
             catch (Exception ex)
