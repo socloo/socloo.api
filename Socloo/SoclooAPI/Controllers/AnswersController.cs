@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "SubclassId", ObjectId.Parse(answer.SubclassId)},
                 { "SubclassType", answer.SubclassType}
             };
-                UnitOfWork.Repository<Answer>().Update(document, ObjectId.Parse(_id), "answers");
+                UnitOfWork.Repository<Answer>().UpdateAsync(document, ObjectId.Parse(_id), "answers");
                 return true;
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace SoclooAPI.Controllers
                  { "SubclassType", answer.SubclassType},
                  { "Deleted", true}
                 };
-                UnitOfWork.Repository<Answer>().DeleteAsync(document, ObjectId.Parse(id), "answers", true);
+                UnitOfWork.Repository<Answer>().Delete(document, ObjectId.Parse(id), "answers", true);
                 return true;
             }
             catch (Exception ex)

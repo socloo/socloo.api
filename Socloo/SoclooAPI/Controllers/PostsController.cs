@@ -72,7 +72,7 @@ namespace SoclooAPI.Controllers
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
             };
 
-                UnitOfWork.Repository<Post>().Update(document, ObjectId.Parse(id), "posts");
+                UnitOfWork.Repository<Post>().UpdateAsync(document, ObjectId.Parse(id), "posts");
                 return true;
             }
             catch (Exception ex)

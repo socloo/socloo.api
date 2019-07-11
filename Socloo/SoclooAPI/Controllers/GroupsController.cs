@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "Info", "" + group.Info},
                 { "PictureId", ObjectId.Parse(group.PictureId)},
             };
-                UnitOfWork.Repository<Group>().Update(document, ObjectId.Parse(_id), "groups");
+                UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(_id), "groups");
                 return true;
             }
             catch (Exception ex)

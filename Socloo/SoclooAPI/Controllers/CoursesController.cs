@@ -74,7 +74,7 @@ namespace SoclooAPI.Controllers
                  { "Section", course.Section},
                  { "SubjectBranch", course.SubjectBranch}
             };
-                UnitOfWork.Repository<Chat>().Update(document, ObjectId.Parse(_id), "courses");
+                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(_id), "courses");
                 return true;
             }
             catch (Exception ex)

@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
             };
-                UnitOfWork.Repository<Chat>().Update(document, ObjectId.Parse(_id), "dashboards");
+                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(_id), "dashboards");
                 return true;
             }
             catch (Exception ex)

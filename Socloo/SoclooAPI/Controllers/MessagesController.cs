@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
             };
 
-                UnitOfWork.Repository<Group>().Update(document, ObjectId.Parse(id), "messages");
+                UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "messages");
                 return true;
             }
             catch (Exception ex)

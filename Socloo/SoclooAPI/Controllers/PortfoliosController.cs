@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "GeneralInfo", ""+portfolio.GeneralInfo},
                 { "Certification",""+portfolio.Certification}
             };
-                UnitOfWork.Repository<Portfolio>().Update(document, ObjectId.Parse(id), "portfolios");
+                UnitOfWork.Repository<Portfolio>().UpdateAsync(document, ObjectId.Parse(id), "portfolios");
                 return true;
             }
             catch (Exception ex)

@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "Info", ""+occurrence.Info},
             };
 
-                UnitOfWork.Repository<Occurrence>().Update(document, ObjectId.Parse(id), "occurrences");
+                UnitOfWork.Repository<Occurrence>().UpdateAsync(document, ObjectId.Parse(id), "occurrences");
                 return true;
             }
             catch (Exception ex)

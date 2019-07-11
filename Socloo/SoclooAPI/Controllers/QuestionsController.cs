@@ -66,7 +66,7 @@ namespace SoclooAPI.Controllers
                 { "Text", question.Text}
 
             };
-                UnitOfWork.Repository<Question>().Update(document, ObjectId.Parse(id), "questions");
+                UnitOfWork.Repository<Question>().UpdateAsync(document, ObjectId.Parse(id), "questions");
                 return true;
             }
             catch (Exception ex)

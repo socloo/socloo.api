@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
                 { "DateTime",doc.DateTime},
             };
 
-                UnitOfWork.Repository<Document>().Update(document, ObjectId.Parse(_id), "documents");
+                UnitOfWork.Repository<Document>().UpdateAsync(document, ObjectId.Parse(_id), "documents");
                 return true;
             }
             catch (Exception ex)

@@ -68,7 +68,7 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(admin.CoursesId)},
                 { "GroupsId",new BsonArray(admin.GroupsId)},
             };
-                UnitOfWork.Repository<SuperAdmin>().Update(document, ObjectId.Parse(id), "superadmins");
+                UnitOfWork.Repository<SuperAdmin>().UpdateAsync(document, ObjectId.Parse(id), "superadmins");
                 return true;
             }
             catch (Exception ex)

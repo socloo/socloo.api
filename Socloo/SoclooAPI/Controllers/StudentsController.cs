@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
             };
             try
             {
-                UnitOfWork.Repository<Student>().Update(document, ObjectId.Parse(id), "students");
+                UnitOfWork.Repository<Student>().UpdateAsync(document, ObjectId.Parse(id), "students");
                 return true;
             }
             catch (Exception ex)

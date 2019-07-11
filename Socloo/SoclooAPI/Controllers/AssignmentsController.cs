@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "FileId", ObjectId.Parse(assignment.FileId)}
             };
 
-                UnitOfWork.Repository<Assignment>().Update(document, ObjectId.Parse(_id), "assignments");
+                UnitOfWork.Repository<Assignment>().UpdateAsync(document, ObjectId.Parse(_id), "assignments");
                 return true;
             }
             catch (Exception ex)

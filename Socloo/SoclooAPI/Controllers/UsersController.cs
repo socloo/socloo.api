@@ -75,7 +75,7 @@ namespace SoclooAPI.Controllers
 
                     {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
                 };
-                UnitOfWork.Repository<User>().Update(document, ObjectId.Parse(id), "users");
+                UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
                 return true;
             }
             catch (Exception ex)

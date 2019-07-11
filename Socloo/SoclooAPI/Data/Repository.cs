@@ -49,7 +49,7 @@ namespace SoclooAPI.Data
             }
         }
 
-        public async void Update(BsonDocument document, ObjectId id, string CollectionName)
+        public async void UpdateAsync(BsonDocument document, ObjectId id, string CollectionName)
         {
             try
             {
