@@ -31,35 +31,43 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<Group> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Group>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Group group)
+        public async Task<IActionResult> Post([FromBody] Group group)
         {
+            try
+            {
+                await UnitOfWork.Repository<Group>().InsertAsync(group);
 
-            await UnitOfWork.Repository<Group>().InsertAsync(group);
+                return new OkObjectResult(group.Id);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
 
-            return true;
+            }
+           
         }
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Group group)
+        async public Task<IActionResult> Put(string id, [FromBody] Group group)
         {
 
            
@@ -74,17 +82,17 @@ namespace SoclooAPI.Controllers
                 { "PictureId", ObjectId.Parse(group.PictureId)},
             };
                 UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "groups");
-                return true;
+                return new OkObjectResult(group.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
-            Group group = this.GetById(id).Result;
+            Group group = (Group)this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
@@ -97,11 +105,11 @@ namespace SoclooAPI.Controllers
                 { "Deleted", true}
             };
                 UnitOfWork.Repository<Group>().DeleteAsync(document, ObjectId.Parse(id), "groups", true);
-                return true;
+                return new OkObjectResult(group);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }
