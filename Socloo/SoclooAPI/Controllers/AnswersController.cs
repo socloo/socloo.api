@@ -59,8 +59,8 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Answer answer)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Answer answer)
         {
 
             
@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "SubclassId", ObjectId.Parse(answer.SubclassId)},
                 { "SubclassType", answer.SubclassType}
             };
-                UnitOfWork.Repository<Answer>().UpdateAsync(document, ObjectId.Parse(_id), "answers");
+                UnitOfWork.Repository<Answer>().UpdateAsync(document, ObjectId.Parse(id), "answers");
                 return true;
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace SoclooAPI.Controllers
                  { "SubclassType", answer.SubclassType},
                  { "Deleted", true}
                 };
-                UnitOfWork.Repository<Answer>().Delete(document, ObjectId.Parse(id), "answers", true);
+                UnitOfWork.Repository<Answer>().DeleteAsync(document, ObjectId.Parse(id), "answers", true);
                 return true;
             }
             catch (Exception ex)

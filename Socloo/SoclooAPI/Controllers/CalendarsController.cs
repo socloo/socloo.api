@@ -57,8 +57,8 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Calendar calendar)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Calendar calendar)
         {
 
             try
@@ -69,7 +69,7 @@ namespace SoclooAPI.Controllers
                  { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
             };
 
-                UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(_id), "calendars");
+                UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(id), "calendars");
                 return true;
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace SoclooAPI.Controllers
                  { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
                  { "Deleted", true}
             };
-                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "calendars", true);
+                UnitOfWork.Repository<Assignment>().DeleteAsync(document, ObjectId.Parse(id), "calendars", true);
                 return true;
             }
             catch (Exception ex)
