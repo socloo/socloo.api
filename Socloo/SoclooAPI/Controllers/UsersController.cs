@@ -58,16 +58,10 @@ namespace SoclooAPI.Controllers
             try{
                 Calendar calendar = new Calendar {Deleted = false, OccurrencesId = new List<string>() };
 
-               var calendarId= UnitOfWork.Repository<Calendar>().InsertAsync(calendar).Result.Id;
-                user.CalendarId = Convert.ToString(calendarId);
+                new CalendarsController(Config, Logger, DataContext).Post(calendar);
                 await UnitOfWork.Repository<User>().InsertAsync(user);
-                var document = new BsonDocument
-                   {
-                   { "UserId", user.Id},
-                   { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
-                    {"Deleted", false}
-                  };
-                UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(user.CalendarId), "calendars");
+                calendar.UserId = Convert.ToString(user.Id);
+                new CalendarsController(Config, Logger, DataContext).Put(Convert.ToString(calendar.Id),calendar);
                 return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
