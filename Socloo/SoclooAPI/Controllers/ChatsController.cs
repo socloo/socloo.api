@@ -57,8 +57,8 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Chat chat)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Chat chat)
         {
 
             try
@@ -71,7 +71,7 @@ namespace SoclooAPI.Controllers
                 { "ChatType", chat.ChatType},
             };
 
-                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(_id), "chats");
+                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "chats");
                 return true;
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace SoclooAPI.Controllers
                 { "ChatType", chat.ChatType},
                  { "Deleted", true}
             };
-                UnitOfWork.Repository<Chat>().Delete(document, ObjectId.Parse(id), "chats", true);
+                UnitOfWork.Repository<Chat>().DeleteAsync(document, ObjectId.Parse(id), "chats", true);
                 return true;
             }
             catch (Exception ex)

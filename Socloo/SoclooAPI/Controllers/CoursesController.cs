@@ -58,8 +58,8 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Course course)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Course course)
         {
 
             
@@ -74,7 +74,7 @@ namespace SoclooAPI.Controllers
                  { "Section", course.Section},
                  { "SubjectBranch", course.SubjectBranch}
             };
-                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(_id), "courses");
+                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "courses");
                 return true;
             }
             catch (Exception ex)

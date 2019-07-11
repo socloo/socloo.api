@@ -57,8 +57,8 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Assignment assignment)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Assignment assignment)
         {
 
             try
@@ -73,7 +73,7 @@ namespace SoclooAPI.Controllers
                 { "FileId", ObjectId.Parse(assignment.FileId)}
             };
 
-                UnitOfWork.Repository<Assignment>().UpdateAsync(document, ObjectId.Parse(_id), "assignments");
+                UnitOfWork.Repository<Assignment>().UpdateAsync(document, ObjectId.Parse(id), "assignments");
                 return true;
             }
             catch (Exception ex)

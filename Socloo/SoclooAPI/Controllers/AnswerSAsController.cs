@@ -59,8 +59,8 @@ namespace SoclooAPI.Controllers
             return true;
         }
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] AnswerSA answerSA)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] AnswerSA answerSA)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace SoclooAPI.Controllers
                     { "Text", answerSA.Text},
                     { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
                 };
-                UnitOfWork.Repository<AnswerSA>().UpdateAsync(document, ObjectId.Parse(_id), "answersas");
+                UnitOfWork.Repository<AnswerSA>().UpdateAsync(document, ObjectId.Parse(id), "answersas");
                 return true;
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace SoclooAPI.Controllers
                        { "QuestionId", ObjectId.Parse(answerSA.QuestionId)},
                     { "Deleted", true}
                 };
-                UnitOfWork.Repository<AnswerSA>().Delete(document, ObjectId.Parse(id), "answersas", true);
+                UnitOfWork.Repository<AnswerSA>().DeleteAsync(document, ObjectId.Parse(id), "answersas", true);
                 return true;
             }
             catch (Exception ex)
