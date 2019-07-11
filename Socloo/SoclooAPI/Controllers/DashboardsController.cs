@@ -59,8 +59,8 @@ namespace SoclooAPI.Controllers
         }
 
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] Dashboard dash)
+        [HttpPut("{id}")]
+        async public Task<bool> Put(string id, [FromBody] Dashboard dash)
         {
 
             
@@ -70,7 +70,7 @@ namespace SoclooAPI.Controllers
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
             };
-                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(_id), "dashboards");
+                UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "dashboards");
                 return true;
             }
             catch (Exception ex)
