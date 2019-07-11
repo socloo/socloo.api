@@ -34,7 +34,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<User> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ObjectId> Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
             try{
 
@@ -66,7 +66,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ObjectId> Put(string id, [FromBody] User user)
+        public async Task<IActionResult> Put(string id, [FromBody] User user)
         {
             try
             {
@@ -94,9 +94,9 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<User> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
-            var user = GetById(id).Result;
+            User user = (User)GetById(id).Result;
 
             try
             {
