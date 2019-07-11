@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class SuperAdminsController : BaseController
     {
-        public SuperAdminsController(IConfiguration config, ILogger<SuperAdminsController> logger, DataContext context) :
+        public SuperAdminsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
 

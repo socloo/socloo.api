@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     public class ChatsController : BaseController
     {
 
-        public ChatsController(IConfiguration config, ILogger<ChatsController> logger, DataContext context) :
+        public ChatsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

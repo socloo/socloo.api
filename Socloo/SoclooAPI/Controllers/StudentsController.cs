@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     public class StudentsController : BaseController
     {
         private MongoDBContext mongoDB;
-        public StudentsController(IConfiguration config, ILogger<StudentsController> logger, DataContext context) :
+        public StudentsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

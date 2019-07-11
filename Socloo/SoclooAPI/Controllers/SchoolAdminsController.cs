@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class SchoolAdminsController : BaseController
     {
-        public SchoolAdminsController(IConfiguration config, ILogger<SchoolAdminsController> logger, DataContext context) :
+        public SchoolAdminsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
 
@@ -54,7 +54,12 @@ namespace SoclooAPI.Controllers
         {
             try { 
             await UnitOfWork.Repository<SchoolAdmin>().InsertAsync(schooladmin);
-            return new OkObjectResult(schooladmin.Id);
+                if (schooladmin.Type == 1)
+                {
+                    Dashboard dashboard = new Dashboard { Deleted=false};
+                    new DashboardsController(Config, Logger, DataContext).Post(dashboard);
+                }
+                return new OkObjectResult(schooladmin.Id);
 
         }catch(Exception ex){
                 return new BadRequestResult();

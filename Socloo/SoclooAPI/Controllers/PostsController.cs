@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class PostsController : BaseController
     {
-        public PostsController(IConfiguration config, ILogger<PostsController> logger, DataContext context) :
+        public PostsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

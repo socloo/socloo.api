@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class QuestionsController : BaseController
     {
-        public QuestionsController(IConfiguration config, ILogger<QuestionsController> logger, DataContext context) :
+        public QuestionsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
 

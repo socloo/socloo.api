@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        public UsersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
+        public UsersController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         {
         }

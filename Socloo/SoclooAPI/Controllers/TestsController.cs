@@ -17,7 +17,7 @@ namespace SoclooAPI.Controllers
     public class TestsController : BaseController
     {
 
-        public TestsController(IConfiguration config, ILogger<TestsController> logger, DataContext context) :
+        public TestsController(IConfiguration config, ILogger logger, DataContext context) :
                 base(config, logger, context)
         { }
 

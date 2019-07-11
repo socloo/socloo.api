@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerMCsController : BaseController
     {
-        public AnswerMCsController(IConfiguration config, ILogger<AnswerMCsController> logger, DataContext context) :
+        public AnswerMCsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

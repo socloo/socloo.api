@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     public class CalendarsController : BaseController
     {
 
-        public CalendarsController(IConfiguration config, ILogger<CalendarsController> logger, DataContext context) :
+        public CalendarsController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
 
