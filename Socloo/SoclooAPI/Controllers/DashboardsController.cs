@@ -31,36 +31,44 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<Dashboard> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Dashboard>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Dashboard dashboard)
+        public async Task<IActionResult> Post([FromBody] Dashboard dash)
         {
+            try
+            {
+                await UnitOfWork.Repository<Dashboard>().InsertAsync(dash);
+                return new OkObjectResult(dash.Id);
 
-            await UnitOfWork.Repository<Dashboard>().InsertAsync(dashboard);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
 
-            return true;
+            }
+
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Dashboard dash)
+        async public Task<IActionResult> Put(string id, [FromBody] Dashboard dash)
         {
 
             
@@ -71,17 +79,17 @@ namespace SoclooAPI.Controllers
                  { "PostsId", new BsonArray(dash.PostsId)},
             };
                 UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "dashboards");
-                return true;
+                return new OkObjectResult(dash.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
-            Dashboard dash = this.GetById(id).Result;
+            Dashboard dash = (Dashboard)this.GetById(id).Result;
             try
             {
                 var document = new BsonDocument
@@ -90,11 +98,11 @@ namespace SoclooAPI.Controllers
                  { "Deleted", true}
             };
                 UnitOfWork.Repository<Dashboard>().DeleteAsync(document, ObjectId.Parse(id), "dashboards", true);
-                return true;
+                return new OkObjectResult(dash);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }

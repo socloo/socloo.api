@@ -30,35 +30,43 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
         [HttpGet("{id}")]
-        public async Task<Message> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Message>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Message message)
+        public async Task<IActionResult> Post([FromBody] Message message)
         {
+            try
+            {
+                await UnitOfWork.Repository<Message>().InsertAsync(message);
 
-            await UnitOfWork.Repository<Message>().InsertAsync(message);
+                return new OkObjectResult(message.Id);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
 
-            return true;
+            }
+            
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Message message)
+        async public Task<IActionResult> Put(string id, [FromBody] Message message)
         {
 
             try
@@ -72,19 +80,19 @@ namespace SoclooAPI.Controllers
             };
 
                 UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "messages");
-                return true;
+                return new OkObjectResult(message.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
             try
             {
-                Message message = this.GetById(id).Result;
+                Message message = (Message)this.GetById(id).Result;
                 var document = new BsonDocument
             {
                   { "UserId", ObjectId.Parse(message.UserId)},
@@ -94,11 +102,11 @@ namespace SoclooAPI.Controllers
                  {"Deleted",true }
             };
                 UnitOfWork.Repository<Message>().DeleteAsync(document, ObjectId.Parse(id), "messages", true);
-                return true;
+                return new OkObjectResult(message);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }

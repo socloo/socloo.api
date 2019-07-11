@@ -30,35 +30,43 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
         [HttpGet("{id}")]
-        public async Task<Calendar> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Calendar>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Calendar calendar)
+        public async Task<IActionResult> Post([FromBody] Calendar calendar)
         {
+            try
+            {
+                await UnitOfWork.Repository<Calendar>().InsertAsync(calendar);
 
-            await UnitOfWork.Repository<Calendar>().InsertAsync(calendar);
+                return new OkObjectResult(calendar.Id);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
 
-            return true;
+            }
+            
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Calendar calendar)
+        async public Task<IActionResult> Put(string id, [FromBody] Calendar calendar)
         {
 
             try
@@ -70,17 +78,17 @@ namespace SoclooAPI.Controllers
             };
 
                 UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(id), "calendars");
-                return true;
+                return new OkObjectResult(calendar.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
-            Calendar calendar = this.GetById(id).Result;
+            Calendar calendar = (Calendar)this.GetById(id).Result;
 
             try
             {
@@ -91,11 +99,11 @@ namespace SoclooAPI.Controllers
                  { "Deleted", true}
             };
                 UnitOfWork.Repository<Assignment>().DeleteAsync(document, ObjectId.Parse(id), "calendars", true);
-                return true;
+                return new OkObjectResult(calendar);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }
