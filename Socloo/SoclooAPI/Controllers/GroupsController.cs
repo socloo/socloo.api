@@ -96,7 +96,7 @@ namespace SoclooAPI.Controllers
                 { "PictureId", ObjectId.Parse(group.PictureId)},
                 { "Deleted", true}
             };
-                UnitOfWork.Repository<Group>().Delete(document, ObjectId.Parse(id), "groups", true);
+                UnitOfWork.Repository<Group>().DeleteAsync(document, ObjectId.Parse(id), "groups", true);
                 return true;
             }
             catch (Exception ex)

@@ -89,7 +89,7 @@ namespace SoclooAPI.Controllers
                  { "PostsId", new BsonArray(dash.PostsId)},
                  { "Deleted", true}
             };
-                UnitOfWork.Repository<Dashboard>().Delete(document, ObjectId.Parse(id), "dashboards", true);
+                UnitOfWork.Repository<Dashboard>().DeleteAsync(document, ObjectId.Parse(id), "dashboards", true);
                 return true;
             }
             catch (Exception ex)

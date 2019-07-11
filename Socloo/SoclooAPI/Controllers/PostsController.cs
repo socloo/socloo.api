@@ -94,7 +94,7 @@ namespace SoclooAPI.Controllers
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
                 {"Deleted",true }
             };
-                UnitOfWork.Repository<Post>().Delete(document, ObjectId.Parse(id), "posts", true);
+                UnitOfWork.Repository<Post>().DeleteAsync(document, ObjectId.Parse(id), "posts", true);
                 return true;
             }
             catch (Exception ex)

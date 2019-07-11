@@ -98,7 +98,7 @@ namespace SoclooAPI.Controllers
                 { "Certification",""+portfolio.Certification},
                 {"Deleted",true }
             };
-                UnitOfWork.Repository<Portfolio>().Delete(document, ObjectId.Parse(id), "portfolios", true);
+                UnitOfWork.Repository<Portfolio>().DeleteAsync(document, ObjectId.Parse(id), "portfolios", true);
                 return true;
             }
             catch (Exception ex)

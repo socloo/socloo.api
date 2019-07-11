@@ -99,7 +99,7 @@ namespace SoclooAPI.Controllers
                  { "SubjectBranch", course.SubjectBranch},
                  { "Deleted", true}
             };
-                UnitOfWork.Repository<Course>().Delete(document, ObjectId.Parse(id), "courses", true);
+                UnitOfWork.Repository<Course>().DeleteAsync(document, ObjectId.Parse(id), "courses", true);
                 return true;
             }
             catch (Exception ex)

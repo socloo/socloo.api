@@ -90,7 +90,7 @@ namespace SoclooAPI.Controllers
                 { "GroupsId",new BsonArray(admin.GroupsId)},
                 {"Deleted",true }
             };
-                UnitOfWork.Repository<SuperAdmin>().Delete(document, ObjectId.Parse(id), "superadmins", true);
+                UnitOfWork.Repository<SuperAdmin>().DeleteAsync(document, ObjectId.Parse(id), "superadmins", true);
                 return true;
             }
             catch (Exception ex)

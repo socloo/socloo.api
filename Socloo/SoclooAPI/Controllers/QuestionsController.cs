@@ -83,7 +83,7 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
             {  { "Text", question.Text},{"Deleted",true }
             };
-                UnitOfWork.Repository<Question>().Delete(document, ObjectId.Parse(id), "questions", true);
+                UnitOfWork.Repository<Question>().DeleteAsync(document, ObjectId.Parse(id), "questions", true);
                 return true;
             }
             catch (Exception ex)

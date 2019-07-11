@@ -96,7 +96,7 @@ namespace SoclooAPI.Controllers
                  {"Deleted",true }
 
             };
-                UnitOfWork.Repository<SchoolAdmin>().Delete(document, ObjectId.Parse(id), "schooladmins", true);
+                UnitOfWork.Repository<SchoolAdmin>().DeleteAsync(document, ObjectId.Parse(id), "schooladmins", true);
                 return true;
             }
             catch (Exception ex)

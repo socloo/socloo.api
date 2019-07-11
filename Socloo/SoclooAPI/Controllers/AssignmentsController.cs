@@ -51,6 +51,8 @@ namespace SoclooAPI.Controllers
 
             await UnitOfWork.Repository<Assignment>().InsertAsync(assignment);
 
+
+
             return true;
         }
 
@@ -94,7 +96,7 @@ namespace SoclooAPI.Controllers
                 { "FileId", ObjectId.Parse(assignment.FileId)},
                     { "Deleted", true}
             };
-                UnitOfWork.Repository<Assignment>().Delete(document, ObjectId.Parse(id), "assignments", true);
+                UnitOfWork.Repository<Assignment>().DeleteAsync(document, ObjectId.Parse(id), "assignments", true);
                 return true;
             }
             catch (Exception ex)

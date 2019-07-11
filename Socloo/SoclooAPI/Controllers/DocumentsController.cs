@@ -92,7 +92,7 @@ namespace SoclooAPI.Controllers
                 { "DateTime",doc.DateTime},
                 { "Deleted", true}
             };
-                UnitOfWork.Repository<Document>().Delete(document, ObjectId.Parse(id), "documents", true);
+                UnitOfWork.Repository<Document>().DeleteAsync(document, ObjectId.Parse(id), "documents", true);
                 return true;
             }
             catch (Exception ex)

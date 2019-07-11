@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
@@ -18,7 +15,8 @@ namespace SoclooAPI.Controllers
     {
         public UsersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
             base(config, logger, context)
-        { }
+        {
+        }
 
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -31,7 +29,7 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
@@ -40,7 +38,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var users = await UnitOfWork.Repository<User>().GetListAsync(u => !u.Deleted&&u.Id== ObjectId.Parse(id));
+                var users = await UnitOfWork.Repository<User>()
+                    .GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
                 return users[0];
             }
             catch (Exception ex)
@@ -52,36 +51,31 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         public async Task<bool> Post([FromBody] User user)
         {
-         
             await UnitOfWork.Repository<User>().InsertAsync(user);
 
             return true;
         }
 
 
-        [HttpPut("{_id}")]
-        async public Task<bool> Put(string _id, [FromBody] User user)
+        [HttpPut("{id}")]
+        public async Task<bool> Put(string id, [FromBody] User user)
         {
-
-
             try
             {
                 var document = new BsonDocument
 
                 {
+                    {"FullName", user.FullName},
 
-                { "FullName", user.FullName},
+                    {"PhoneNumber", user.PhoneNumber},
 
-                { "PhoneNumber", user.PhoneNumber},
+                    {"Email", user.Email},
 
-                { "Email", user.Email},
+                    {"Bio", user.Bio},
 
-                { "Bio", user.Bio},
-
-                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
-
-                  };
-                UnitOfWork.Repository<User>().Update(document, ObjectId.Parse(_id),"users");
+                    {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
+                };
+                UnitOfWork.Repository<User>().Update(document, ObjectId.Parse(id), "users");
                 return true;
             }
             catch (Exception ex)
@@ -94,34 +88,31 @@ namespace SoclooAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<bool> DeleteById(string id)
         {
-            User user = this.GetById(id).Result;
+            var user = GetById(id).Result;
 
             try
             {
                 var document = new BsonDocument
 
                 {
+                    {"FullName", user.FullName},
 
-                { "FullName", user.FullName},
+                    {"PhoneNumber", user.PhoneNumber},
 
-                { "PhoneNumber", user.PhoneNumber},
+                    {"Email", user.Email},
 
-                { "Email", user.Email},
+                    {"Bio", user.Bio},
 
-                { "Bio", user.Bio},
-
-                { "ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)},
-                    {"Deleted",true }
-
-                  };
-                UnitOfWork.Repository<User>().Delete(document, ObjectId.Parse(id), "users", true);
+                    {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)},
+                    {"Deleted", true}
+                };
+                await UnitOfWork.Repository<User>().DeleteAsync(document, ObjectId.Parse(id), "users");
                 return true;
             }
             catch (Exception ex)
             {
                 return false;
             }
-
         }
     }
 }

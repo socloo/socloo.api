@@ -93,7 +93,7 @@ namespace SoclooAPI.Controllers
                 { "Info", ""+occurrence.Info},
                   {"Deleted",true }
             };
-                UnitOfWork.Repository<Occurrence>().Delete(document, ObjectId.Parse(id), "occurrences", true);
+                UnitOfWork.Repository<Occurrence>().DeleteAsync(document, ObjectId.Parse(id), "occurrences", true);
                 return true;
             }
             catch (Exception ex)

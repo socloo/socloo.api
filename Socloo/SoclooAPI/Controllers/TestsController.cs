@@ -101,7 +101,7 @@ namespace SoclooAPI.Controllers
 
             };
             
-                UnitOfWork.Repository<Test>().Delete(document, ObjectId.Parse(id), "tests", true);
+                UnitOfWork.Repository<Test>().DeleteAsync(document, ObjectId.Parse(id), "tests", true);
                 return true;
             }
             catch (Exception ex)

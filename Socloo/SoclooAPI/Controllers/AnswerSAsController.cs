@@ -91,7 +91,7 @@ namespace SoclooAPI.Controllers
                        { "QuestionId", ObjectId.Parse(answerSA.QuestionId)},
                     { "Deleted", true}
                 };
-                UnitOfWork.Repository<AnswerSA>().Delete(document, ObjectId.Parse(id), "answersas", true);
+                UnitOfWork.Repository<AnswerSA>().DeleteAsync(document, ObjectId.Parse(id), "answersas", true);
                 return true;
             }
             catch (Exception ex)

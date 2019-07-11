@@ -93,7 +93,7 @@ namespace SoclooAPI.Controllers
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
                  {"Deleted",true }
             };
-                UnitOfWork.Repository<Message>().Delete(document, ObjectId.Parse(id), "messages", true);
+                UnitOfWork.Repository<Message>().DeleteAsync(document, ObjectId.Parse(id), "messages", true);
                 return true;
             }
             catch (Exception ex)

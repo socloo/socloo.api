@@ -91,7 +91,7 @@ namespace SoclooAPI.Controllers
                 { "GroupsId", new BsonArray(teacher.GroupsId)},
                 { "Subject", new BsonArray(teacher.Subject)}
             };
-                UnitOfWork.Repository<Teacher>().Delete(document, ObjectId.Parse(id), "teacher", true);
+                UnitOfWork.Repository<Teacher>().DeleteAsync(document, ObjectId.Parse(id), "teacher", true);
                 return true;
             }
             catch (Exception ex)
