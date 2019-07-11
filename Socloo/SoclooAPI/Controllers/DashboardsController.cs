@@ -77,6 +77,7 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
+                    {"UsersId", new BsonArray(dash.UsersId) }
             };
                 UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "dashboards");
                 return new OkObjectResult(dash.Id);
@@ -95,6 +96,7 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
+                       {"UsersId", new BsonArray(dash.UsersId) },
                  { "Deleted", true}
             };
                 UnitOfWork.Repository<Dashboard>().DeleteAsync(document, ObjectId.Parse(id), "dashboards", true);

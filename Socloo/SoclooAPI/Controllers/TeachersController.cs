@@ -48,10 +48,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Teacher teacher)
+        public async Task<IActionResult> Post([FromBody] Teacher teacher,User user)
         {
             try
             {
+                new UsersController(Config, Logger, DataContext).Post(user);
+                teacher.UserId = Convert.ToString(user.Id);
                 UnitOfWork.Repository<Teacher>().InsertAsync(teacher);
 
                 return new OkObjectResult(teacher.Id);
