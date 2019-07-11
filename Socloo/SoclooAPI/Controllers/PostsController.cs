@@ -30,35 +30,42 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
         [HttpGet("{id}")]
-        public async Task<Post> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Post>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Post post)
+        public async Task<IActionResult> Post([FromBody] Post post)
         {
-
+            try { 
             await UnitOfWork.Repository<Post>().InsertAsync(post);
 
-            return true;
+                return new OkObjectResult(post.Id);
+
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
+            }
+
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Post post)
+        public async Task<IActionResult> Put(string id, [FromBody] Post post)
         {
             
             try
@@ -73,19 +80,19 @@ namespace SoclooAPI.Controllers
             };
 
                 UnitOfWork.Repository<Post>().UpdateAsync(document, ObjectId.Parse(id), "posts");
-                return true;
+                return new OkObjectResult(post.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
             try
             {
-                Post post = this.GetById(id).Result;
+                Post post = (Post)this.GetById(id).Result;
                 var document = new BsonDocument
             {  { "UserId", ObjectId.Parse(post.UserId)},
                  { "Title", post.Title},
@@ -95,11 +102,11 @@ namespace SoclooAPI.Controllers
                 {"Deleted",true }
             };
                 UnitOfWork.Repository<Post>().DeleteAsync(document, ObjectId.Parse(id), "posts", true);
-                return true;
+                return new OkObjectResult(post);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }

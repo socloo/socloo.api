@@ -34,12 +34,12 @@ namespace SoclooAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<Occurrence> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var result = await UnitOfWork.Repository<Occurrence>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return result[0];
+                return new OkObjectResult(result[0]);
             }
             catch (Exception ex)
             {
@@ -48,17 +48,24 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] Occurrence occurrence)
+        public async Task<IActionResult> Post([FromBody] Occurrence occurrence)
         {
+            try
+            {
+
+            
 
             await UnitOfWork.Repository<Occurrence>().InsertAsync(occurrence);
+            return new OkObjectResult(occurrence.Id);
 
-            return true;
-        }
+        }catch(Exception ex){
+                return new BadRequestResult();
+    }
+}
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] Occurrence occurrence)
+        public async Task<IActionResult> Put(string id, [FromBody] Occurrence occurrence)
         {
 
             try
@@ -72,19 +79,19 @@ namespace SoclooAPI.Controllers
             };
 
                 UnitOfWork.Repository<Occurrence>().UpdateAsync(document, ObjectId.Parse(id), "occurrences");
-                return true;
+                return new OkObjectResult(occurrence.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
             try
             {
-                Occurrence occurrence = this.GetById(id).Result;
+                Occurrence occurrence = (Occurrence)this.GetById(id).Result;
                 var document = new BsonDocument
             {
                  {"Type",occurrence.Type },
@@ -94,11 +101,11 @@ namespace SoclooAPI.Controllers
                   {"Deleted",true }
             };
                 UnitOfWork.Repository<Occurrence>().DeleteAsync(document, ObjectId.Parse(id), "occurrences", true);
-                return true;
+                return new OkObjectResult(occurrence);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }

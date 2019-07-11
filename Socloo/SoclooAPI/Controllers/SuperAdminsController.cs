@@ -31,32 +31,41 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
         [HttpGet("{id}")]
-        public async Task<SuperAdmin> GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var superAdmins = await UnitOfWork.Repository<SuperAdmin>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return superAdmins[0];
+                return new OkObjectResult(superAdmins[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        async public void Post([FromBody] SuperAdmin admin)
+        public async Task<IActionResult> Post([FromBody] SuperAdmin admin)
         {
-            await UnitOfWork.Repository<SuperAdmin>().InsertAsync(admin);
+            try
+            {
+
+                await UnitOfWork.Repository<SuperAdmin>().InsertAsync(admin);
+                return new OkObjectResult(admin.Id);
+            }
+            catch(Exception ex)
+            {
+                return new BadRequestResult();
+            }
         }
 
 
         [HttpPut("{id}")]
-        async public Task<bool> Put(string id, [FromBody] SuperAdmin admin)
+         public async Task<IActionResult> Put(string id, [FromBody] SuperAdmin admin)
         {
 
             try
@@ -69,19 +78,19 @@ namespace SoclooAPI.Controllers
                 { "GroupsId",new BsonArray(admin.GroupsId)},
             };
                 UnitOfWork.Repository<SuperAdmin>().UpdateAsync(document, ObjectId.Parse(id), "superadmins");
-                return true;
+                return new OkObjectResult(admin.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
             try
             {
-                SuperAdmin admin = this.GetById(id).Result;
+                SuperAdmin admin = (SuperAdmin)this.GetById(id).Result;
                 var document = new BsonDocument
             {
                  { "UserId", ObjectId.Parse(admin.UserId)},
@@ -91,11 +100,11 @@ namespace SoclooAPI.Controllers
                 {"Deleted",true }
             };
                 UnitOfWork.Repository<SuperAdmin>().DeleteAsync(document, ObjectId.Parse(id), "superadmins", true);
-                return true;
+                return new OkObjectResult(admin);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
 
         }
