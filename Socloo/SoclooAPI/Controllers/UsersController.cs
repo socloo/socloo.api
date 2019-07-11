@@ -40,25 +40,33 @@ namespace SoclooAPI.Controllers
             {
                 var users = await UnitOfWork.Repository<User>()
                     .GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return users[0];
+                 return new OkObjectResult(users[0]);
             }
             catch (Exception ex)
             {
-                return null;
+                return new BadRequestResult();
             }
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] User user)
+        public async Task<ObjectId> Post([FromBody] User user)
         {
-            await UnitOfWork.Repository<User>().InsertAsync(user);
+            try{
 
-            return true;
+                 await UnitOfWork.Repository<User>().InsertAsync(user);
+
+                 return new OkObjectResult(user.Id);
+
+            }catch(Exception ex){
+                return new BadRequestResult();
+                }
+
+           
         }
 
 
         [HttpPut("{id}")]
-        public async Task<bool> Put(string id, [FromBody] User user)
+        public async Task<ObjectId> Put(string id, [FromBody] User user)
         {
             try
             {
@@ -76,17 +84,17 @@ namespace SoclooAPI.Controllers
                     {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)}
                 };
                 UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
-                return true;
+                 return new OkObjectResult(user.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
 
 
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteById(string id)
+        public async Task<User> DeleteById(string id)
         {
             var user = GetById(id).Result;
 
@@ -107,11 +115,11 @@ namespace SoclooAPI.Controllers
                     {"Deleted", true}
                 };
                 await UnitOfWork.Repository<User>().DeleteAsync(document, ObjectId.Parse(id), "users");
-                return true;
+                return new OkObjectResult(user);
             }
             catch (Exception ex)
             {
-                return false;
+                return new BadRequestResult();
             }
         }
     }
