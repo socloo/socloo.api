@@ -59,6 +59,11 @@ namespace SoclooAPI.Controllers
             try{
               
                 await UnitOfWork.Repository<User>().InsertAsync(user);
+                ILogger<CalendarsController> logger = new LoggerFactory().CreateLogger<CalendarsController>();
+                Calendar calendar = new Calendar { UserId = Convert.ToString(user.Id), Deleted=false};
+                OkObjectResult calendarResponse = (OkObjectResult) await new CalendarsController(Config, logger, DataContext).Post(calendar);
+                user.CalendarId = Convert.ToString(calendar.Id);
+                await this.Put(Convert.ToString(user.Id), user);
                 return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
