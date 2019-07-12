@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class PortfoliosController : BaseController
     {
-        public PortfoliosController(IConfiguration config, ILogger logger, DataContext context) :
+        public PortfoliosController(IConfiguration config, ILogger<PortfoliosController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
@@ -49,12 +49,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Portfolio porfolio)
+        public async Task<IActionResult> Post([FromBody] Portfolio portfolio)
         {
             try { 
 
-            await UnitOfWork.Repository<Portfolio>().InsertAsync(porfolio);
-            return new OkObjectResult(porfolio.Id);
+            await UnitOfWork.Repository<Portfolio>().InsertAsync(portfolio);
+            return new OkObjectResult(portfolio.Id);
 
         }catch(Exception ex){
                 return new BadRequestResult();

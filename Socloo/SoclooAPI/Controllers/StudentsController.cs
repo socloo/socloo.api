@@ -17,7 +17,7 @@ namespace SoclooAPI.Controllers
     public class StudentsController : BaseController
     {
         private MongoDBContext mongoDB;
-        public StudentsController(IConfiguration config, ILogger logger, DataContext context) :
+        public StudentsController(IConfiguration config, ILogger<StudentsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
@@ -49,9 +49,33 @@ namespace SoclooAPI.Controllers
         }
 
        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Student student)
+        public async Task<IActionResult> Post([FromBody] StudentViewModel model)
         {
             try {
+
+                var user = new User
+                {
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+
+                ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
+                OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
+
+                ILogger<PortfoliosController> loggerPortfolio = new LoggerFactory().CreateLogger<PortfoliosController>();
+                OkObjectResult PortfolioResponse = (OkObjectResult)await new PortfoliosController(Config, loggerPortfolio, DataContext).Post(new Portfolio { UserId= Convert.ToString(userResponse.Value),Certification="",Deleted=false,Education="",Experience="",GeneralInfo="",Interests="",References="",Skills="" });
+
+                var student = new Student
+                {
+                    CoursesId=model.CoursesId,
+                    GroupsId=model.GroupsId,
+                    PortfolioId= Convert.ToString(PortfolioResponse.Value),
+                    TeachersId=model.TeachersId,
+                    Deleted = false,
+                    UserId = Convert.ToString(userResponse.Value),
+                };
                 await UnitOfWork.Repository<Student>().InsertAsync(student);
 
             return new OkObjectResult(student.Id);
