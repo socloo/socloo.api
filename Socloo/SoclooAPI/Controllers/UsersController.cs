@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        public UsersController(IConfiguration config, ILogger logger, DataContext context) :
+        public UsersController(IConfiguration config, ILogger<UsersController> logger, DataContext context) :
             base(config, logger, context)
         {
         }
@@ -27,6 +27,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
+                
                 var users = await UnitOfWork.Repository<User>().GetListAsync(u => !u.Deleted);
 
                 return new OkObjectResult(users);
@@ -57,11 +58,17 @@ namespace SoclooAPI.Controllers
         {
             try{
                 Calendar calendar = new Calendar {Deleted = false, OccurrencesId = new List<string>() };
-
-                new CalendarsController(Config, Logger, DataContext).Post(calendar);
+                await UnitOfWork.Repository<Calendar>().InsertAsync(calendar);
                 await UnitOfWork.Repository<User>().InsertAsync(user);
                 calendar.UserId = Convert.ToString(user.Id);
-                new CalendarsController(Config, Logger, DataContext).Put(Convert.ToString(calendar.Id),calendar);
+                var document = new BsonDocument
+            {
+                   { "UserId", user.Id},
+                 { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
+                    { "Deleted", false}
+            };
+
+                UnitOfWork.Repository<Calendar>().UpdateAsync(document, calendar.Id, "calendars");
                 return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
@@ -104,6 +111,7 @@ namespace SoclooAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteById(string id)
         {
+
             User user = (User)GetById(id).Result;
 
             try

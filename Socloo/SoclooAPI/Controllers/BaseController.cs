@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     {
         UnitOfWork _unitOfWork;
 
-        protected ILogger Logger { get; private set; }
+        protected ILogger Logger { get; set; }
         protected IConfiguration Config { get; private set; }
         protected DataContext DataContext { get; private set; }
 

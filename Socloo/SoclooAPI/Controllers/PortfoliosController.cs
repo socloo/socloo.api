@@ -13,9 +13,9 @@ namespace SoclooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PorfoliosController : BaseController
+    public class PortfoliosController : BaseController
     {
-        public PorfoliosController(IConfiguration config, ILogger logger, DataContext context) :
+        public PortfoliosController(IConfiguration config, ILogger logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

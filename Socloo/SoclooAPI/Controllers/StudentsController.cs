@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using RestSharp;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
@@ -47,16 +48,14 @@ namespace SoclooAPI.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Student student, User user)
+       [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Student student)
         {
             try {
-                new UsersController(Config, Logger, DataContext).Post(user);
-                student.UserId = Convert.ToString(user.Id);
                 await UnitOfWork.Repository<Student>().InsertAsync(student);
 
             return new OkObjectResult(student.Id);
-
+            
         }catch(Exception ex){
                 return new BadRequestResult();
     }

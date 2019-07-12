@@ -84,10 +84,6 @@ namespace SoclooAPI
                 {
                     database.CreateCollection("questions");
                 }
-                if (!list.Contains("schools"))
-                {
-                    database.CreateCollection("schools");
-                }
                 if (!list.Contains("schooladmins"))
                 {
                     database.CreateCollection("schooladmins");
