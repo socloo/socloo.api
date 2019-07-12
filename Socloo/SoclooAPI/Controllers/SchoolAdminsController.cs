@@ -50,14 +50,35 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SchoolAdmin schooladmin)
+        public async Task<IActionResult> Post([FromBody] SchoolAdminViewModel model)
         {
-            try {
+            try
+            {
+
+                var user = new User
+                {
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+
                 ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
-                new UsersController(Config, logger, DataContext).Post();
-                await UnitOfWork.Repository<SchoolAdmin>().InsertAsync(schooladmin);
+                OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
+                string x = Convert.ToString(userResponse.Value);
+
+                     var schoolAdmin = new SchoolAdmin {
+                    CoursesId = model.CoursesId,
+                    Deleted = false,
+                    GroupsId = model.GroupsId,
+                    TeachersId = model.TeachersId,
+                    Type = model.Type,
+                    UserId = x,
+                };
+
+                await UnitOfWork.Repository<SchoolAdmin>().InsertAsync(schoolAdmin);
               
-                return new OkObjectResult(schooladmin.Id);
+                return new OkObjectResult(schoolAdmin.Id);
 
         }catch(Exception ex){
                 return new BadRequestResult();

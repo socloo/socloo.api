@@ -57,18 +57,8 @@ namespace SoclooAPI.Controllers
         public async Task<IActionResult> Post([FromBody] User user)
         {
             try{
-                Calendar calendar = new Calendar {Deleted = false, OccurrencesId = new List<string>() };
-                await UnitOfWork.Repository<Calendar>().InsertAsync(calendar);
+              
                 await UnitOfWork.Repository<User>().InsertAsync(user);
-                calendar.UserId = Convert.ToString(user.Id);
-                var document = new BsonDocument
-            {
-                   { "UserId", user.Id},
-                 { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
-                    { "Deleted", false}
-            };
-
-                UnitOfWork.Repository<Calendar>().UpdateAsync(document, calendar.Id, "calendars");
                 return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
