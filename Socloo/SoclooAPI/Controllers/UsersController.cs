@@ -63,7 +63,7 @@ namespace SoclooAPI.Controllers
                 Calendar calendar = new Calendar { UserId = Convert.ToString(user.Id), Deleted=false};
                 OkObjectResult calendarResponse = (OkObjectResult) await new CalendarsController(Config, logger, DataContext).Post(calendar);
                 user.CalendarId = Convert.ToString(calendar.Id);
-                
+                user.ProfilePictureId = "5d286be132b90e35642c96db";
                 await this.Put(Convert.ToString(user.Id), user);
                 return new OkObjectResult(user.Id);
 
@@ -80,28 +80,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-              BsonDocument document;
-            if (user.ProfilePictureId == null)
-            {
-                document = new BsonDocument
-
-                {
-                    {"FullName", user.FullName+""},
-
-                    {"PhoneNumber", user.PhoneNumber+""},
-
-                    {"Email", user.Email+""},
-
-                    {"Bio", user.Bio+""},
-                    {"ProfilePictureId",ObjectId.GenerateNewId()},
-                    {"CalendarId", ObjectId.Parse(user.CalendarId) },
-                    { "Deleted",user.Deleted}
-
-                };
-            }
-            else
-            {
-                document = new BsonDocument
+                var document = new BsonDocument
 
                 {
                     {"FullName", user.FullName+""},
@@ -117,7 +96,6 @@ namespace SoclooAPI.Controllers
                     { "Deleted",user.Deleted}
 
                 };
-            }
             
                
                 UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
