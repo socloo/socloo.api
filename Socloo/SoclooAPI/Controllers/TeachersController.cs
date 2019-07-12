@@ -14,7 +14,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class TeachersController : BaseController
     {
-        public TeachersController(IConfiguration config, ILogger logger, DataContext context) :
+        public TeachersController(IConfiguration config, ILogger<TeachersController> logger, DataContext context) :
                 base(config, logger, context)
         { }
 
@@ -48,12 +48,30 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Teacher teacher)
+        public async Task<IActionResult> Post([FromBody] TeacherViewModel model)
         {
             try
             {
+                var user = new User
+                {
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
 
-                UnitOfWork.Repository<Teacher>().InsertAsync(teacher);
+                ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
+                OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
+
+                var teacher = new Teacher
+                {
+                    CoursesId = model.CoursesId,
+                    Deleted = model.Deleted,
+                    GroupsId = model.GroupsId,
+                    Subject = model.Subject,
+                    UserId = Convert.ToString(user.Id),
+                };
+
+                await UnitOfWork.Repository<Teacher>().InsertAsync(teacher);
 
                 return new OkObjectResult(teacher.Id);
             }

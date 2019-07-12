@@ -59,6 +59,12 @@ namespace SoclooAPI.Controllers
             try{
               
                 await UnitOfWork.Repository<User>().InsertAsync(user);
+                ILogger<CalendarsController> logger = new LoggerFactory().CreateLogger<CalendarsController>();
+                Calendar calendar = new Calendar { UserId = Convert.ToString(user.Id), Deleted=false};
+                OkObjectResult calendarResponse = (OkObjectResult) await new CalendarsController(Config, logger, DataContext).Post(calendar);
+                user.CalendarId = Convert.ToString(calendar.Id);
+                
+                await this.Put(Convert.ToString(user.Id), user);
                 return new OkObjectResult(user.Id);
 
             }catch(Exception ex){
@@ -74,20 +80,46 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var document = new BsonDocument
+              BsonDocument document;
+            if (user.ProfilePictureId == null)
+            {
+                document = new BsonDocument
 
                 {
-                    {"FullName", user.FullName},
+                    {"FullName", user.FullName+""},
 
-                    {"PhoneNumber", user.PhoneNumber},
+                    {"PhoneNumber", user.PhoneNumber+""},
 
-                    {"Email", user.Email},
+                    {"Email", user.Email+""},
 
-                    {"Bio", user.Bio},
+                    {"Bio", user.Bio+""},
+                    {"ProfilePictureId",ObjectId.GenerateNewId()},
+                    {"CalendarId", ObjectId.Parse(user.CalendarId) },
+                    { "Deleted",user.Deleted}
+
+                };
+            }
+            else
+            {
+                document = new BsonDocument
+
+                {
+                    {"FullName", user.FullName+""},
+
+                    {"PhoneNumber", user.PhoneNumber+""},
+
+                    {"Email", user.Email+""},
+
+                    {"Bio", user.Bio+""},
 
                     {"ProfilePictureId", ObjectId.Parse(user.ProfilePictureId)},
-                   
+                    {"CalendarId", ObjectId.Parse(user.CalendarId) },
+                    { "Deleted",user.Deleted}
+
                 };
+            }
+            
+               
                 UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
                  return new OkObjectResult(user.Id);
             }
