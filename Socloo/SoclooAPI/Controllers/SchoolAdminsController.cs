@@ -65,7 +65,6 @@ namespace SoclooAPI.Controllers
 
                 ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
                 OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
-                string x = Convert.ToString(userResponse.Value);
 
                      var schoolAdmin = new SchoolAdmin {
                     CoursesId = model.CoursesId,
@@ -73,7 +72,7 @@ namespace SoclooAPI.Controllers
                     GroupsId = model.GroupsId,
                     TeachersId = model.TeachersId,
                     Type = model.Type,
-                    UserId = x,
+                    UserId = Convert.ToString(userResponse.Value),
                 };
 
                 await UnitOfWork.Repository<SchoolAdmin>().InsertAsync(schoolAdmin);
