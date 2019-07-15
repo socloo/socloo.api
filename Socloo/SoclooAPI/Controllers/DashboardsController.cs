@@ -17,7 +17,7 @@ namespace SoclooAPI.Controllers
     public class DashboardsController : BaseController
     {
 
-        public DashboardsController(IConfiguration config, ILogger logger, DataContext context) :
+        public DashboardsController(IConfiguration config, ILogger<DashboardsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

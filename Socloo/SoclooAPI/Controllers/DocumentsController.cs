@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class DocumentsController : BaseController
     {
-        public DocumentsController(IConfiguration config, ILogger logger, DataContext context) :
+        public DocumentsController(IConfiguration config, ILogger<DocumentsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]

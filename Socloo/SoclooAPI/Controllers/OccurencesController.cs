@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class OccurencesController : BaseController
     {
-        public OccurencesController(IConfiguration config, ILogger logger, DataContext context) :
+        public OccurencesController(IConfiguration config, ILogger<OccurencesController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
