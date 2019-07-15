@@ -15,7 +15,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class SuperAdminsController : BaseController
     {
-        public SuperAdminsController(IConfiguration config, ILogger logger, DataContext context) :
+        public SuperAdminsController(IConfiguration config, ILogger<SuperAdminsController> logger, DataContext context) :
             base(config, logger, context)
         { }
 
@@ -49,13 +49,29 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SuperAdmin admin)
+        public async Task<IActionResult> Post([FromBody] SuperAdminViewModel model)
         {
             try
             {
+                var user = new User
+                {
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+                ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
+                OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
+                var superAdmin = new SuperAdmin
+                {
 
-                await UnitOfWork.Repository<SuperAdmin>().InsertAsync(admin);
-                return new OkObjectResult(admin.Id);
+                    CoursesId = model.CoursesId,
+                    Deleted = model.Deleted,
+                    GroupsId = model.GroupsId,
+                   TeachersId=model.TeachersId,
+                    UserId = Convert.ToString(user.Id),
+                };
+                await UnitOfWork.Repository<SuperAdmin>().InsertAsync(superAdmin);
+                return new OkObjectResult(superAdmin.Id);
             }
             catch(Exception ex)
             {

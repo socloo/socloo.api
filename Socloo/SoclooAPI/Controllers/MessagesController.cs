@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class MessagesController : BaseController
     {
-        public MessagesController(IConfiguration config, ILogger logger, DataContext context) :
+        public MessagesController(IConfiguration config, ILogger<MessagesController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
