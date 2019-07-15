@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerTFsController : BaseController
     {
-        public AnswerTFsController(IConfiguration config, ILogger logger, DataContext context) :
+        public AnswerTFsController(IConfiguration config, ILogger<AnswerTFsController> logger, DataContext context) :
             base(config, logger, context)
         { }
 
@@ -55,7 +55,9 @@ namespace SoclooAPI.Controllers
             try
             {
                 await UnitOfWork.Repository<AnswerTF>().InsertAsync(answerTF);
-
+                ILogger<AnswersController> logger = new LoggerFactory().CreateLogger<AnswersController>();
+                Answer answer = new Answer { Deleted = false, SubclassId = Convert.ToString(answerTF.Id), SubclassType = 3 };
+                OkObjectResult answerResponse = (OkObjectResult)await new AnswersController(Config, logger, DataContext).Post(answer);
                 return new OkObjectResult(answerTF.Id);
             }
             catch (Exception ex)

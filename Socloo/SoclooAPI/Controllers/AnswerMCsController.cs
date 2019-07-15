@@ -16,7 +16,7 @@ namespace SoclooAPI.Controllers
     [ApiController]
     public class AnswerMCsController : BaseController
     {
-        public AnswerMCsController(IConfiguration config, ILogger logger, DataContext context) :
+        public AnswerMCsController(IConfiguration config, ILogger<AnswerMCsController> logger, DataContext context) :
             base(config, logger, context)
         { }
         [HttpGet]
@@ -55,7 +55,9 @@ namespace SoclooAPI.Controllers
             try
             {
                 await UnitOfWork.Repository<AnswerMC>().InsertAsync(answerMC);
-
+                ILogger<AnswersController> logger = new LoggerFactory().CreateLogger<AnswersController>();
+                Answer answer = new Answer { Deleted= false, SubclassId=Convert.ToString(answerMC.Id), SubclassType=1 };
+                OkObjectResult answerResponse = (OkObjectResult)await new AnswersController(Config, logger, DataContext).Post(answer);
                 return new OkObjectResult(answerMC.Id);
             }
             catch (Exception ex)
