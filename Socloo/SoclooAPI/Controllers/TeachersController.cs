@@ -85,12 +85,12 @@ namespace SoclooAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] Teacher teacher)
+        public IActionResult Put(string id, [FromBody] Teacher teacher)
         {
 
             var document = new BsonDocument
             {
-                { "UserId", teacher.UserId},
+                { "UserId", ObjectId.Parse(teacher.UserId)},
                 { "CoursesId", new BsonArray(teacher.CoursesId)},
                 { "GroupsId", new BsonArray(teacher.GroupsId)},
                 { "Subject", new BsonArray(teacher.Subject)}
@@ -99,7 +99,7 @@ namespace SoclooAPI.Controllers
             {
                 UnitOfWork.Repository<Teacher>().UpdateAsync(document, ObjectId.Parse(id), "teachers");
 
-                return new OkObjectResult(teacher.Id);
+                return new OkObjectResult(id);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteById(string id)
+        public IActionResult DeleteById(string id)
         {
             try
             {
