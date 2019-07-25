@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -20,8 +17,8 @@ namespace SoclooAPI.Controllers
             base(config, logger, context)
         { }
 
-       
-    
+
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -64,7 +61,7 @@ namespace SoclooAPI.Controllers
                 return new BadRequestResult();
 
             }
-            
+
         }
 
 

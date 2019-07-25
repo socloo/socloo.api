@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
@@ -34,7 +31,7 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-               return new BadRequestResult();
+                return new BadRequestResult();
             }
         }
 
@@ -44,22 +41,22 @@ namespace SoclooAPI.Controllers
             try
             {
                 var tests = await UnitOfWork.Repository<Test>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                 return new OkObjectResult(tests[0]);
+                return new OkObjectResult(tests[0]);
             }
             catch (Exception ex)
             {
-            return new BadRequestResult();
+                return new BadRequestResult();
             }
         }
         [HttpPost]
-         public async Task<IActionResult> Post([FromBody] Test test)
+        public async Task<IActionResult> Post([FromBody] Test test)
         {
             try
             {
                 UnitOfWork.Repository<Test>().InsertAsync(test);
                 return new OkObjectResult(test.Id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BadRequestResult();
             }
@@ -69,7 +66,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-            var document = new BsonDocument
+                var document = new BsonDocument
             {
                  { "TeachersId", new BsonArray(test.TeachersId)},
                  { "StudentsId", new BsonArray(test.StudentsId)},
@@ -78,13 +75,13 @@ namespace SoclooAPI.Controllers
                  { "QuestionsId", new BsonArray(test.QuestionsId)},
                  { "Type", test.Type}
             };
-            
+
                 UnitOfWork.Repository<Test>().UpdateAsync(document, ObjectId.Parse(id), "tests");
                 return new OkObjectResult(test.Id);
             }
             catch (Exception ex)
             {
-               return new BadRequestResult();
+                return new BadRequestResult();
             }
         }
 
@@ -92,11 +89,11 @@ namespace SoclooAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteById(string id)
         {
-            
+
             try
             {
                 Test test = (Test)GetById(id).Result;
-            var document = new BsonDocument
+                var document = new BsonDocument
             {
                  { "TeachersId", new BsonArray(test.TeachersId)},
                  { "StudentsId", new BsonArray(test.StudentsId)},
@@ -107,9 +104,9 @@ namespace SoclooAPI.Controllers
                     {"Deleted",true }
 
             };
-            
+
                 UnitOfWork.Repository<Test>().DeleteAsync(document, ObjectId.Parse(id), "tests", true);
-                 return new OkObjectResult(test.Id);
+                return new OkObjectResult(test.Id);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using SoclooAPI.Data;
 using System.Collections.Generic;
 
 namespace SoclooAPI.Models

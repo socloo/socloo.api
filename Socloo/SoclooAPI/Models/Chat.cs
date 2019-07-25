@@ -11,7 +11,7 @@ namespace SoclooAPI.Models
         public bool Deleted { get; set; } = false;
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> UsersId { get; set; }
-        
+
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> MessagesId { get; set; }
         public string ChatName { get; set; }

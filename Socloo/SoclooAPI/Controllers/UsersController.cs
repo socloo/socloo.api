@@ -1,13 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
 {
@@ -20,14 +18,14 @@ namespace SoclooAPI.Controllers
         {
         }
 
-        
+
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                
+
                 var users = await UnitOfWork.Repository<User>().GetListAsync(u => !u.Deleted);
 
                 return new OkObjectResult(users);
@@ -45,7 +43,7 @@ namespace SoclooAPI.Controllers
             {
                 var users = await UnitOfWork.Repository<User>()
                     .GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                 return new OkObjectResult(users[0]);
+                return new OkObjectResult(users[0]);
             }
             catch (Exception ex)
             {
@@ -56,22 +54,25 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] User user)
         {
-            try{
-              
+            try
+            {
+
                 await UnitOfWork.Repository<User>().InsertAsync(user);
                 ILogger<CalendarsController> logger = new LoggerFactory().CreateLogger<CalendarsController>();
-                Calendar calendar = new Calendar { UserId = Convert.ToString(user.Id), Deleted=false};
-                OkObjectResult calendarResponse = (OkObjectResult) await new CalendarsController(Config, logger, DataContext).Post(calendar);
+                Calendar calendar = new Calendar { UserId = Convert.ToString(user.Id), Deleted = false };
+                OkObjectResult calendarResponse = (OkObjectResult)await new CalendarsController(Config, logger, DataContext).Post(calendar);
                 user.CalendarId = Convert.ToString(calendar.Id);
                 user.ProfilePictureId = "5d286be132b90e35642c96db";
                 await this.Put(Convert.ToString(user.Id), user);
                 return new OkObjectResult(user.Id);
 
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return new BadRequestResult();
-                }
+            }
 
-           
+
         }
 
 
@@ -96,10 +97,10 @@ namespace SoclooAPI.Controllers
                     { "Deleted",user.Deleted}
 
                 };
-            
-               
+
+
                 UnitOfWork.Repository<User>().UpdateAsync(document, ObjectId.Parse(id), "users");
-                 return new OkObjectResult(user.Id);
+                return new OkObjectResult(user.Id);
             }
             catch (Exception ex)
             {

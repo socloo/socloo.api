@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
@@ -63,14 +60,14 @@ namespace SoclooAPI.Controllers
                 return new BadRequestResult();
 
             }
-           
+
         }
 
         [HttpPut("{id}")]
         async public Task<IActionResult> Put(string id, [FromBody] Group group)
         {
 
-           
+
             try
             {
                 var document = new BsonDocument

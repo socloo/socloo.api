@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SoclooAPI.Models
+﻿namespace SoclooAPI.Models
 {
     public enum AnswerEnum
     {
@@ -31,8 +26,8 @@ namespace SoclooAPI.Models
     }
     public enum SchoolAdminEnum
     {
-        Owner =1,
-        Standard=2
+        Owner = 1,
+        Standard = 2
     }
     public enum TestEnum
     {

@@ -11,8 +11,8 @@ namespace SoclooAPI.Models
         public bool Deleted { get; set; } = false;
         [BsonRepresentation(BsonType.ObjectId)]
         public string SubclassId { get; set; }
-        public int SubclassType { get; set; } 
+        public int SubclassType { get; set; }
 
-        
+
     }
 }

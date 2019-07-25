@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
@@ -50,8 +47,9 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Post post)
         {
-            try { 
-            await UnitOfWork.Repository<Post>().InsertAsync(post);
+            try
+            {
+                await UnitOfWork.Repository<Post>().InsertAsync(post);
 
                 return new OkObjectResult(post.Id);
 
@@ -67,7 +65,7 @@ namespace SoclooAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody] Post post)
         {
-            
+
             try
             {
                 var document = new BsonDocument

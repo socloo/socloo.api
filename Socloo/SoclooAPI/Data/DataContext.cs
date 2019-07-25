@@ -36,4 +36,4 @@ namespace SoclooAPI.Data
             _client.DropDatabase(dbName);
         }
     }
-    }
+}

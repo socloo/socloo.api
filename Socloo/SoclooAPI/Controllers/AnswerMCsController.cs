@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
@@ -56,7 +53,7 @@ namespace SoclooAPI.Controllers
             {
                 await UnitOfWork.Repository<AnswerMC>().InsertAsync(answerMC);
                 ILogger<AnswersController> logger = new LoggerFactory().CreateLogger<AnswersController>();
-                Answer answer = new Answer { Deleted= false, SubclassId=Convert.ToString(answerMC.Id), SubclassType=1 };
+                Answer answer = new Answer { Deleted = false, SubclassId = Convert.ToString(answerMC.Id), SubclassType = 1 };
                 OkObjectResult answerResponse = (OkObjectResult)await new AnswersController(Config, logger, DataContext).Post(answer);
                 return new OkObjectResult(answerMC.Id);
             }
@@ -64,7 +61,7 @@ namespace SoclooAPI.Controllers
             {
                 return new BadRequestResult();
             }
-            
+
         }
 
         [HttpPut("{id}")]

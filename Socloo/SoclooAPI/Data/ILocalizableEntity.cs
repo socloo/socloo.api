@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SoclooAPI.Data
+﻿namespace SoclooAPI.Data
 {
     public interface ILocalizableEntity<T> : IEntity<T>
     {

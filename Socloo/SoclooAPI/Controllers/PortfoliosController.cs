@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -29,7 +26,7 @@ namespace SoclooAPI.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 return new BadRequestResult();
             }
         }
@@ -51,21 +48,24 @@ namespace SoclooAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Portfolio portfolio)
         {
-            try { 
+            try
+            {
 
-            await UnitOfWork.Repository<Portfolio>().InsertAsync(portfolio);
-            return new OkObjectResult(portfolio.Id);
+                await UnitOfWork.Repository<Portfolio>().InsertAsync(portfolio);
+                return new OkObjectResult(portfolio.Id);
 
-        }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return new BadRequestResult();
-    }
-}
+            }
+        }
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody] Portfolio portfolio)
         {
-            
+
             try
             {
                 var document = new BsonDocument
@@ -92,7 +92,7 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                Portfolio portfolio= (Portfolio)this.GetById(id).Result;
+                Portfolio portfolio = (Portfolio)this.GetById(id).Result;
                 var document = new BsonDocument
             {  { "UserId",ObjectId.Parse(portfolio.UserId)},
                 { "Education", ""+portfolio.Education},

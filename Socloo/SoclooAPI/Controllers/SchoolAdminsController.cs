@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -66,7 +63,8 @@ namespace SoclooAPI.Controllers
                 ILogger<UsersController> logger = new LoggerFactory().CreateLogger<UsersController>();
                 OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
 
-                     var schoolAdmin = new SchoolAdmin {
+                var schoolAdmin = new SchoolAdmin
+                {
                     CoursesId = model.CoursesId,
                     Deleted = false,
                     GroupsId = model.GroupsId,
@@ -76,16 +74,18 @@ namespace SoclooAPI.Controllers
                 };
 
                 await UnitOfWork.Repository<SchoolAdmin>().InsertAsync(schoolAdmin);
-              
+
                 return new OkObjectResult(schoolAdmin.Id);
 
-        }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return new BadRequestResult();
-    }
+            }
 
-}
-[HttpPut("{id}")]
-        public async Task<IActionResult>Put(string id, [FromBody] SchoolAdmin schooladmin)
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(string id, [FromBody] SchoolAdmin schooladmin)
         {
 
             var document = new BsonDocument

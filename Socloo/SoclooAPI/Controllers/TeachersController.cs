@@ -2,11 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -18,7 +16,7 @@ namespace SoclooAPI.Controllers
                 base(config, logger, context)
         { }
 
-    [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
@@ -80,7 +78,7 @@ namespace SoclooAPI.Controllers
                 return new BadRequestResult();
             }
 
-            
+
 
         }
 
@@ -114,8 +112,8 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                var teacher =  UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id)).Result;
-                
+                var teacher = UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id)).Result;
+
 
 
                 var document = new BsonDocument

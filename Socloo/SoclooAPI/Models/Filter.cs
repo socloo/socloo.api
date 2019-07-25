@@ -1,10 +1,7 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 
 namespace SoclooAPI.Models
 {
@@ -25,11 +22,11 @@ namespace SoclooAPI.Models
                 if (Text.ToLower().Contains(word.Text))
                 {
                     string newValue = "";
-                    for(int i = 0; i < word.Text.Length; i++)
+                    for (int i = 0; i < word.Text.Length; i++)
                     {
                         newValue = newValue + "*";
                     }
-                    Text =Text.Replace(word.Text, newValue);
+                    Text = Text.Replace(word.Text, newValue);
                 }
             }
             foreach (var word in fr)

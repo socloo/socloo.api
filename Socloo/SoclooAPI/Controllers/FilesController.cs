@@ -2,15 +2,10 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using SoclooAPI.Models;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using SoclooAPI.Data;
-using System.Collections.Generic;
 
 namespace SoclooAPI.Controllers
 {
@@ -38,7 +33,7 @@ namespace SoclooAPI.Controllers
                 byte[] bytes = System.IO.File.ReadAllBytes(path);
                 var option = new GridFSUploadOptions
                 {
-                    
+
 
                 };
                 fs.UploadFromBytes(filename, bytes, option);

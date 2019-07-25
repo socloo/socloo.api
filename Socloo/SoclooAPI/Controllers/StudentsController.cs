@@ -2,13 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
-using RestSharp;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -48,10 +44,11 @@ namespace SoclooAPI.Controllers
             }
         }
 
-       [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] StudentViewModel model)
         {
-            try {
+            try
+            {
 
                 var user = new User
                 {
@@ -65,25 +62,27 @@ namespace SoclooAPI.Controllers
                 OkObjectResult userResponse = (OkObjectResult)await new UsersController(Config, logger, DataContext).Post(user);
 
                 ILogger<PortfoliosController> loggerPortfolio = new LoggerFactory().CreateLogger<PortfoliosController>();
-                OkObjectResult PortfolioResponse = (OkObjectResult)await new PortfoliosController(Config, loggerPortfolio, DataContext).Post(new Portfolio { UserId= Convert.ToString(userResponse.Value),Certification="",Deleted=false,Education="",Experience="",GeneralInfo="",Interests="",References="",Skills="" });
+                OkObjectResult PortfolioResponse = (OkObjectResult)await new PortfoliosController(Config, loggerPortfolio, DataContext).Post(new Portfolio { UserId = Convert.ToString(userResponse.Value), Certification = "", Deleted = false, Education = "", Experience = "", GeneralInfo = "", Interests = "", References = "", Skills = "" });
 
                 var student = new Student
                 {
-                    CoursesId=model.CoursesId,
-                    GroupsId=model.GroupsId,
-                    PortfolioId= Convert.ToString(PortfolioResponse.Value),
-                    TeachersId=model.TeachersId,
+                    CoursesId = model.CoursesId,
+                    GroupsId = model.GroupsId,
+                    PortfolioId = Convert.ToString(PortfolioResponse.Value),
+                    TeachersId = model.TeachersId,
                     Deleted = false,
                     UserId = Convert.ToString(userResponse.Value),
                 };
                 await UnitOfWork.Repository<Student>().InsertAsync(student);
 
-            return new OkObjectResult(student.Id);
-            
-        }catch(Exception ex){
+                return new OkObjectResult(student.Id);
+
+            }
+            catch (Exception ex)
+            {
                 return new BadRequestResult();
-    }
-}
+            }
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody] Student student)

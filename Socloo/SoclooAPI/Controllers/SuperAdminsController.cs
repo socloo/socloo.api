@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 namespace SoclooAPI.Controllers
 {
@@ -67,13 +64,13 @@ namespace SoclooAPI.Controllers
                     CoursesId = model.CoursesId,
                     Deleted = model.Deleted,
                     GroupsId = model.GroupsId,
-                   TeachersId=model.TeachersId,
+                    TeachersId = model.TeachersId,
                     UserId = Convert.ToString(user.Id),
                 };
                 await UnitOfWork.Repository<SuperAdmin>().InsertAsync(superAdmin);
                 return new OkObjectResult(superAdmin.Id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BadRequestResult();
             }
@@ -81,7 +78,7 @@ namespace SoclooAPI.Controllers
 
 
         [HttpPut("{id}")]
-         public async Task<IActionResult> Put(string id, [FromBody] SuperAdmin admin)
+        public async Task<IActionResult> Put(string id, [FromBody] SuperAdmin admin)
         {
 
             try

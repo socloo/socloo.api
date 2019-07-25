@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using SoclooAPI.Data;
 using SoclooAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoclooAPI.Controllers
@@ -53,15 +50,17 @@ namespace SoclooAPI.Controllers
             try
             {
 
-            
 
-            await UnitOfWork.Repository<Occurrence>().InsertAsync(occurrence);
-            return new OkObjectResult(occurrence.Id);
 
-        }catch(Exception ex){
+                await UnitOfWork.Repository<Occurrence>().InsertAsync(occurrence);
+                return new OkObjectResult(occurrence.Id);
+
+            }
+            catch (Exception ex)
+            {
                 return new BadRequestResult();
-    }
-}
+            }
+        }
 
 
         [HttpPut("{id}")]

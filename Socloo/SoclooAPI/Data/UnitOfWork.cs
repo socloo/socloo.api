@@ -1,8 +1,6 @@
 ﻿using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SoclooAPI.Data
 {
@@ -177,7 +175,7 @@ namespace SoclooAPI.Data
 
             return (PortfolioRepository<T>)_geoRepository[typeof(T)];
         }
-        public  PostRepository<T> PostRepository<T>() where T : ILocalizableEntity<ObjectId>
+        public PostRepository<T> PostRepository<T>() where T : ILocalizableEntity<ObjectId>
         {
             if (!_geoRepository.Keys.Contains(typeof(T)))
             {
@@ -275,7 +273,7 @@ namespace SoclooAPI.Data
 
             return (UserRepository<T>)_geoRepository[typeof(T)];
         }
- 
+
         public UnitOfWork(DataContext context)
         {
             _repository = new Dictionary<Type, object>();
