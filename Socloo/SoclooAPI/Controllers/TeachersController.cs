@@ -39,7 +39,7 @@ namespace SoclooAPI.Controllers
             try
             {
                 var teacher = await UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id));
-                return new OkObjectResult(teacher[0]);
+                return new ObjectResult(teacher[0]);
             }
             catch (Exception ex)
             {
@@ -93,7 +93,8 @@ namespace SoclooAPI.Controllers
                 { "UserId", ObjectId.Parse(teacher.UserId)},
                 { "CoursesId", new BsonArray(teacher.CoursesId)},
                 { "GroupsId", new BsonArray(teacher.GroupsId)},
-                { "Subject", new BsonArray(teacher.Subject)}
+                { "Subject", new BsonArray(teacher.Subject)},
+                {"Deleted",false}
             };
             try
             {
@@ -113,15 +114,19 @@ namespace SoclooAPI.Controllers
         {
             try
             {
-                Teacher teacher = (Teacher)this.GetById(id).Result;
+                var teacher =  UnitOfWork.Repository<Teacher>().GetListAsync(u => !u.Deleted && u.Id == ObjectId.Parse(id)).Result;
+                
+
+
                 var document = new BsonDocument
             {
-                { "UserId", teacher.UserId},
-                { "CoursesId", new BsonArray(teacher.CoursesId)},
-                { "GroupsId", new BsonArray(teacher.GroupsId)},
-                { "Subject", new BsonArray(teacher.Subject)}
+                { "UserId",  ObjectId.Parse(teacher[0].UserId)},
+                { "CoursesId", new BsonArray(teacher[0].CoursesId)},
+                { "GroupsId", new BsonArray(teacher[0].GroupsId)},
+                { "Subject", new BsonArray(teacher[0].Subject)},
+                {"Deleted",true }
             };
-                UnitOfWork.Repository<Teacher>().DeleteAsync(document, ObjectId.Parse(id), "teacher", true);
+                UnitOfWork.Repository<Teacher>().DeleteAsync(document, ObjectId.Parse(id), "teachers", true);
 
                 return new OkObjectResult(teacher);
             }

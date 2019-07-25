@@ -63,7 +63,6 @@ namespace SoclooAPI.Data
             {
                 Context.Logger.LogError(ex, "Update");
 
-                //throw ex;
             }
         }
 
