@@ -78,6 +78,7 @@ namespace SoclooAPI.Controllers
             {
                    { "UserId", ObjectId.Parse(calendar.UserId)},
                  { "OccurrencesId", new BsonArray(calendar.OccurrencesId)},
+                 {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Calendar>().UpdateAsync(document, ObjectId.Parse(id), "calendars");

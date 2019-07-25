@@ -76,6 +76,7 @@ namespace SoclooAPI.Controllers
                  { "TeacherId", ObjectId.Parse(occurrence.TeacherId)},
                  { "Date",Convert.ToDateTime(occurrence.Date)},
                 { "Info", ""+occurrence.Info},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Occurrence>().UpdateAsync(document, ObjectId.Parse(id), "occurrences");

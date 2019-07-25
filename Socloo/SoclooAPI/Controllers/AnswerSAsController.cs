@@ -77,7 +77,8 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
                 {
                     { "Text", answerSA.Text},
-                    { "QuestionId", ObjectId.Parse(answerSA.QuestionId)}
+                    { "QuestionId", ObjectId.Parse(answerSA.QuestionId)},
+                    {"Deleted",false}
                 };
                 UnitOfWork.Repository<AnswerSA>().UpdateAsync(document, ObjectId.Parse(id), "answersas");
                 return new OkObjectResult(answerSA.Id);

@@ -70,7 +70,8 @@ namespace SoclooAPI.Controllers
             {
                 var document = new BsonDocument
             {
-                { "Text", question.Text}
+                { "Text", question.Text},
+                {"Deleted",false}
 
             };
                 UnitOfWork.Repository<Question>().UpdateAsync(document, ObjectId.Parse(id), "questions");

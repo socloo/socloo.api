@@ -77,6 +77,7 @@ namespace SoclooAPI.Controllers
                  { "Content",post.Content},
                 { "Type", post.Type},
                 { "PostDate", Convert.ToDateTime(post.PostDate)},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Post>().UpdateAsync(document, ObjectId.Parse(id), "posts");

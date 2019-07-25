@@ -79,7 +79,8 @@ namespace SoclooAPI.Controllers
                  { "CoordinatorsId",new BsonArray(course.CoordinatorsId)},
                  { "Grade", course.Grade},
                  { "Section", course.Section},
-                 { "SubjectBranch", course.SubjectBranch}
+                 { "SubjectBranch", course.SubjectBranch},
+                 {"Deleted",false}
             };
                 UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "courses");
                 return new OkObjectResult(course.Id);

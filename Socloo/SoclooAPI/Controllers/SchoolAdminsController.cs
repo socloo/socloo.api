@@ -94,7 +94,8 @@ namespace SoclooAPI.Controllers
                  { "TeachersId", new BsonArray(schooladmin.TeachersId)},
                  { "CoursesId",new BsonArray(schooladmin.CoursesId)},
                  { "GroupsId", new BsonArray(schooladmin.GroupsId)},
-                 {"Type",schooladmin.Type }
+                 {"Type",schooladmin.Type },
+                 {"Deleted",false}
 
             };
             try

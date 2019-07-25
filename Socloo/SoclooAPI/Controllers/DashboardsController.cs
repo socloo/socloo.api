@@ -77,7 +77,8 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
             {
                  { "PostsId", new BsonArray(dash.PostsId)},
-                    {"UsersId", new BsonArray(dash.UsersId) }
+                    {"UsersId", new BsonArray(dash.UsersId) },
+                    {"Deleted",false}
             };
                 UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "dashboards");
                 return new OkObjectResult(dash.Id);

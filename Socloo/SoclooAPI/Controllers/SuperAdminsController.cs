@@ -92,6 +92,7 @@ namespace SoclooAPI.Controllers
                  { "TeachersId", new BsonArray(admin.TeachersId)},
                  { "CoursesId",new BsonArray(admin.CoursesId)},
                 { "GroupsId",new BsonArray(admin.GroupsId)},
+                {"Deleted",false}
             };
                 UnitOfWork.Repository<SuperAdmin>().UpdateAsync(document, ObjectId.Parse(id), "superadmins");
                 return new OkObjectResult(admin.Id);

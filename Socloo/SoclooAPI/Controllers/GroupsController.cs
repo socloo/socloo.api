@@ -80,6 +80,7 @@ namespace SoclooAPI.Controllers
                 { "Name", "" + group.Name},
                 { "Info", "" + group.Info},
                 { "PictureId", ObjectId.Parse(group.PictureId)},
+                {"Deleted",false}
             };
                 UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "groups");
                 return new OkObjectResult(group.Id);

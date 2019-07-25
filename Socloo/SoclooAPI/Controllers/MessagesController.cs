@@ -77,6 +77,7 @@ namespace SoclooAPI.Controllers
                  { "DataTime", Convert.ToDateTime(message.DataTime)},
                  { "MessageText",message.MessageText},
                 { "ChatId",  ObjectId.Parse(message.ChatId)},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Group>().UpdateAsync(document, ObjectId.Parse(id), "messages");

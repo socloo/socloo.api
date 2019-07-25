@@ -96,6 +96,7 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(student.CoursesId)},
                 { "GroupsId", new BsonArray(student.GroupsId)},
                 { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
+                {"Deleted",false}
             };
             try
             {

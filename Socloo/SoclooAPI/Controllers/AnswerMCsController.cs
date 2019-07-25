@@ -77,7 +77,8 @@ namespace SoclooAPI.Controllers
                      { "Text", answerMC.Text},
                      { "QuestionId",ObjectId.Parse(answerMC.QuestionId)},
                      { "Correct", answerMC.Correct},
-                     { "Image", ObjectId.Parse(answerMC.Image)}
+                     { "Image", ObjectId.Parse(answerMC.Image)},
+                     {"Deleted",false}
                 };
                 UnitOfWork.Repository<AnswerMC>().UpdateAsync(document, ObjectId.Parse(id), "answermcs");
                 return new OkObjectResult(answerMC.Id);

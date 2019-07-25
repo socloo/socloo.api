@@ -78,7 +78,8 @@ namespace SoclooAPI.Controllers
                  { "StudentsId", new BsonArray(assignment.StudentsId)},
                 { "ExpirationDate",Convert.ToDateTime(assignment.ExpirationDate)},
                 { "Info", assignment.Info},
-                { "FileId", ObjectId.Parse(assignment.FileId)}
+                { "FileId", ObjectId.Parse(assignment.FileId)},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Assignment>().UpdateAsync(document, ObjectId.Parse(id), "assignments");

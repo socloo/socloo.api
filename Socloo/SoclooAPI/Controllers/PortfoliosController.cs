@@ -76,7 +76,8 @@ namespace SoclooAPI.Controllers
                 { "Interests", ""+portfolio.Interests},
                 { "References", ""+portfolio.References},
                 { "GeneralInfo", ""+portfolio.GeneralInfo},
-                { "Certification",""+portfolio.Certification}
+                { "Certification",""+portfolio.Certification},
+                {"Deleted",false}
             };
                 UnitOfWork.Repository<Portfolio>().UpdateAsync(document, ObjectId.Parse(id), "portfolios");
                 return new OkObjectResult(portfolio.Id);

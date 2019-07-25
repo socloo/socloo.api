@@ -77,6 +77,7 @@ namespace SoclooAPI.Controllers
                  { "MessagesId",new BsonArray(chat.MessagesId)},
                  {"ChatName",chat.ChatName },
                 { "ChatType", chat.ChatType},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Chat>().UpdateAsync(document, ObjectId.Parse(id), "chats");

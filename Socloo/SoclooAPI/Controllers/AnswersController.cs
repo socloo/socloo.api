@@ -76,7 +76,8 @@ namespace SoclooAPI.Controllers
                 var document = new BsonDocument
             {
                 { "SubclassId", ObjectId.Parse(answer.SubclassId)},
-                { "SubclassType", answer.SubclassType}
+                { "SubclassType", answer.SubclassType},
+                {"Deleted",false}
             };
                 UnitOfWork.Repository<Answer>().UpdateAsync(document, ObjectId.Parse(id), "answers");
                 return new OkObjectResult(answer.Id);

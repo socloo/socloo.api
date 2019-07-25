@@ -76,6 +76,7 @@ namespace SoclooAPI.Controllers
                  { "UsersId", new BsonArray(doc.UsersId)},
                  { "TeacherId", ObjectId.Parse(doc.TeacherId)},
                 { "DateTime",doc.DateTime},
+                {"Deleted",false}
             };
 
                 UnitOfWork.Repository<Document>().UpdateAsync(document, ObjectId.Parse(id), "documents");
