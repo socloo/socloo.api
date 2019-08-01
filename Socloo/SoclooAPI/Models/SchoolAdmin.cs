@@ -19,6 +19,8 @@ namespace SoclooAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> GroupsId { get; set; }
         public int Type { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string SchoolId { get; set; }
         public bool Deleted { get; set; } = false;
     }
 }

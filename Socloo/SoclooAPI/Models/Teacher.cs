@@ -22,5 +22,7 @@ namespace SoclooAPI.Models
 
         public List<string> Subject { get; set; }
         public bool Deleted { get; set; } = false;
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string SchoolId { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace SoclooAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id} {url}")]
 
         public bool DownLoadFiles(String id, string url)
         {

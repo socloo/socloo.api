@@ -72,6 +72,7 @@ namespace SoclooAPI.Controllers
                     TeachersId = model.TeachersId,
                     Deleted = false,
                     UserId = Convert.ToString(userResponse.Value),
+                    SchoolId = model.SchoolId
                 };
                 await UnitOfWork.Repository<Student>().InsertAsync(student);
 
@@ -95,7 +96,8 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(student.CoursesId)},
                 { "GroupsId", new BsonArray(student.GroupsId)},
                 { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
-                {"Deleted",false}
+                {"Deleted",false},
+                {"SchoolId", ObjectId.Parse(student.SchoolId) }
             };
             try
             {
@@ -122,7 +124,8 @@ namespace SoclooAPI.Controllers
                  { "CoursesId",new BsonArray(student.CoursesId)},
                 { "GroupsId", new BsonArray(student.GroupsId)},
                 { "PortfolioId", ObjectId.Parse(student.PortfolioId)},
-                  {"Deleted",true }
+                  {"Deleted",true },
+                  {"SchoolId", ObjectId.Parse(student.SchoolId) }
             };
                 UnitOfWork.Repository<Student>().DeleteAsync(document, ObjectId.Parse(id), "students", true);
                 return new OkObjectResult(student);
